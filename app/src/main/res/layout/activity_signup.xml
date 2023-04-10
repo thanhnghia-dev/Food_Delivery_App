@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/logoView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/logo_food"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="TẠO TÀI KHOẢN"
+        android:textSize="28sp"
+        android:textColor="@color/red_strong"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/edPhone"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="Số điện thoại"
+        android:inputType="phone"
+        android:padding="8dp"
+        android:background="@drawable/border_edt"
+        android:drawableLeft="@drawable/baseline_phone_24"
+        android:drawablePadding="8dp"/>
+
+    <EditText
+        android:id="@+id/edPassword"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="Mật khẩu"
+        android:inputType="textPassword"
+        android:padding="8dp"
+        android:background="@drawable/border_edt"
+        android:drawableLeft="@drawable/baseline_lock_24"
+        android:drawablePadding="8dp"/>
+
+    <EditText
+        android:id="@+id/edRePass"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:hint="Nhập lại mật khẩu"
+        android:inputType="textPassword"
+        android:padding="8dp"
+        android:background="@drawable/border_edt"
+        android:drawableLeft="@drawable/baseline_lock_24"
+        android:drawablePadding="8dp"/>
+
+    <Button
+        android:id="@+id/btnSignup"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="Tạo tài khoản"
+        android:textSize="18sp"
+        android:layout_margin="20dp"
+        android:layout_gravity="center"
+        android:background="@drawable/border_button"
+        android:textColor="@color/white"
+        android:textStyle="bold"/>
+
+</LinearLayout>
