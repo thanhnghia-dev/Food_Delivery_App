@@ -12,22 +12,28 @@
         android:icon="@drawable/logo_food"
         android:label="Food Delivery"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:theme="@style/Theme.Food_Delivery_App"
         tools:targetApi="31">
         <activity
             android:name=".controller.ForgotPassActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".controller.SignupActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".controller.LoginActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".controller.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".controller.LaunchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

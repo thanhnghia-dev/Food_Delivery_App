@@ -14,4 +14,9 @@
         android:id="@+id/wishlist"
         android:icon="@drawable/icons_favorite"
         android:title="Yêu thích" />
+
+    <item
+        android:id="@+id/account"
+        android:icon="@drawable/icon_user"
+        android:title="Tài khoản" />
 </menu>
