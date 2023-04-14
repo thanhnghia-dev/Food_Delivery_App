@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.food_delivery_app.R;
+import com.example.food_delivery_app.databinding.ActivityLoginBinding;
 
 public class LaunchActivity extends AppCompatActivity {
 
@@ -22,7 +23,7 @@ public class LaunchActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.d("Test", "Error Start");
                 } finally {
-                    Intent intent = new Intent(LaunchActivity.this, LoginActivity.class);
+                    Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
             }
