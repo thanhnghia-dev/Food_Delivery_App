@@ -2,51 +2,90 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp"
     android:background="@color/white"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/logoView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="20dp"
-        android:src="@drawable/logo_food"
-        android:layout_gravity="center"/>
-
-    <TextView
+    <!-- Tool bar -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="QUÊN MẬT KHẨU"
-        android:textSize="30sp"
-        android:textColor="@color/red_strong"
-        android:textStyle="bold"/>
+        android:background="@color/red_strong"
+        android:padding="16dp">
 
-    <EditText
-        android:id="@+id/edPhone"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:hint="Số điện thoại"
-        android:inputType="phone"
-        android:padding="8dp"
-        android:background="@drawable/border_edt"
-        android:drawableLeft="@drawable/baseline_phone_24"
-        android:drawablePadding="8dp"/>
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/baseline_arrow_back_ios_24"/>
 
-    <Button
-        android:id="@+id/btnContinue"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@id/back"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:text="Quên mật khẩu"
+            android:textStyle="bold"/>
+
+    </RelativeLayout>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Tiếp tục"
-        android:textSize="18sp"
-        android:layout_margin="20dp"
-        android:layout_gravity="center"
-        android:background="@drawable/border_button"
-        android:textColor="@color/white"
-        android:textStyle="bold"/>
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/logoView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/logo_food"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="QUÊN MẬT KHẨU"
+                android:textSize="30sp"
+                android:textColor="@color/red_strong"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/edPhone"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:hint="Số điện thoại"
+                android:inputType="phone"
+                android:padding="8dp"
+                android:background="@drawable/border_edt"
+                android:drawableLeft="@drawable/baseline_phone_24"
+                android:drawablePadding="8dp"/>
+
+            <Button
+                android:id="@+id/btnContinue"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Tiếp tục"
+                android:textSize="18sp"
+                android:layout_margin="20dp"
+                android:layout_gravity="center"
+                android:background="@drawable/border_button"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>
