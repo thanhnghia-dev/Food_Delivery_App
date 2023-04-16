@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="QUÊN MẬT KHẨU"
-                android:textSize="30sp"
+                android:textSize="28sp"
                 android:textColor="@color/red_strong"
                 android:textStyle="bold"/>
 
@@ -77,7 +77,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Tiếp tục"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:layout_margin="20dp"
                 android:layout_gravity="center"
                 android:background="@drawable/border_button"
