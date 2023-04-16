@@ -119,7 +119,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Tạo tài khoản"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:layout_margin="20dp"
                 android:layout_gravity="center"
                 android:background="@drawable/border_button"
