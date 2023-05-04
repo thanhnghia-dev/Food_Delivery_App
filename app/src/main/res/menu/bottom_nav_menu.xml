@@ -6,17 +6,17 @@
         android:title="Trang chủ" />
 
     <item
+        android:id="@+id/wishlist"
+        android:icon="@drawable/outline_storefront_24"
+        android:title="Cửa hàng" />
+
+    <item
         android:id="@+id/myOrder"
         android:icon="@drawable/icon_shopping_bag"
         android:title="Đơn hàng" />
 
     <item
-        android:id="@+id/wishlist"
-        android:icon="@drawable/icons_favorite"
-        android:title="Yêu thích" />
-
-    <item
         android:id="@+id/account"
         android:icon="@drawable/icon_user"
-        android:title="Tài khoản" />
+        android:title="Cá nhân" />
 </menu>

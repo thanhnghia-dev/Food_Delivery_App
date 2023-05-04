@@ -27,38 +27,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="TẠO TÀI KHOẢN"
-                android:textSize="28sp"
+                android:text="THAY ĐỔI MẬT KHẨU"
+                android:textSize="26sp"
                 android:textColor="@color/red_strong"
                 android:textStyle="bold"/>
-
-            <EditText
-                android:id="@+id/edName"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:hint="Họ và tên"
-                android:inputType="textPersonName"
-                android:padding="8dp"
-                android:background="@drawable/border_edt"
-                android:drawableLeft="@drawable/baseline_person_24"
-                android:drawablePadding="8dp"/>
-
-            <EditText
-                android:id="@+id/edPhone"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:hint="Số điện thoại"
-                android:inputType="phone"
-                android:padding="8dp"
-                android:background="@drawable/border_edt"
-                android:drawableLeft="@drawable/baseline_phone_24"
-                android:drawablePadding="8dp"/>
 
             <EditText
                 android:id="@+id/edPassword"
@@ -67,7 +39,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:hint="Mật khẩu"
+                android:hint="Mật khẩu mới"
                 android:inputType="textPassword"
                 android:padding="8dp"
                 android:background="@drawable/border_edt"
@@ -81,7 +53,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:hint="Nhập lại mật khẩu"
+                android:hint="Nhập lại mật khẩu mới"
                 android:inputType="textPassword"
                 android:padding="8dp"
                 android:background="@drawable/border_edt"
@@ -89,10 +61,10 @@
                 android:drawablePadding="8dp"/>
 
             <Button
-                android:id="@+id/btnSignup"
+                android:id="@+id/btnSave"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:text="Tạo tài khoản"
+                android:text="Lưu thay đổi"
                 android:textSize="17sp"
                 android:layout_margin="20dp"
                 android:layout_gravity="center"

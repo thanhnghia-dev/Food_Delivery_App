@@ -5,60 +5,13 @@
     android:layout_height="match_parent"
     tools:context=".fragment.AccountFragment">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="@color/red_strong">
-
-        <ImageView
-            android:id="@+id/avt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/icon_user"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="30dp"
-            android:layout_marginBottom="20dp"/>
-
-        <TextView
-            android:id="@+id/signup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Đăng ký"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:layout_alignParentEnd="@+id/avt"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="37dp"
-            android:layout_marginBottom="40dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="@+id/avt"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="126dp"
-            android:layout_marginBottom="40dp"
-            android:text="|"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
-
-        <TextView
-            android:id="@+id/login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="@+id/avt"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="145dp"
-            android:layout_marginBottom="40dp"
-            android:text="Đăng nhập"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"/>
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/avt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/icon_user" />
 
 </FrameLayout>

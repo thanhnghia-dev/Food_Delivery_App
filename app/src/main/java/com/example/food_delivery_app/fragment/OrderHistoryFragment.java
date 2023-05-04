@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 
 import com.example.food_delivery_app.R;
 
-public class CartFragment extends Fragment {
+public class OrderHistoryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cart, container, false);
+        View view = inflater.inflate(R.layout.fragment_order_history, container, false);
         return view;
     }
 }

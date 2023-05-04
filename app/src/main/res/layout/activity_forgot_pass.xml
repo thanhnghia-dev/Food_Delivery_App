@@ -5,36 +5,9 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <!-- Tool bar -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/red_strong"
-        android:padding="16dp">
-
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@drawable/baseline_arrow_back_ios_24"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_toEndOf="@id/back"
-            android:layout_centerVertical="true"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:text="Quên mật khẩu"
-            android:textStyle="bold"/>
-
-    </RelativeLayout>
-
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,6 +18,7 @@
                 android:id="@+id/logoView"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:src="@drawable/logo_food"
                 android:layout_gravity="center"/>

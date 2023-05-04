@@ -11,9 +11,9 @@ import android.view.MenuItem;
 
 import com.example.food_delivery_app.R;
 import com.example.food_delivery_app.fragment.AccountFragment;
-import com.example.food_delivery_app.fragment.CartFragment;
+import com.example.food_delivery_app.fragment.OrderFragment;
 import com.example.food_delivery_app.fragment.HomeFragment;
-import com.example.food_delivery_app.fragment.WishListFragment;
+import com.example.food_delivery_app.fragment.StoreFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -37,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.myOrder:
-                        replaceFragment(new CartFragment());
+                        replaceFragment(new OrderFragment());
                         break;
 
                     case R.id.wishlist:
-                        replaceFragment(new WishListFragment());
+                        replaceFragment(new StoreFragment());
                         break;
 
                     case R.id.account:

@@ -23,7 +23,7 @@ public class LaunchActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     Log.d("Test", "Error Start");
                 } finally {
-                    Intent intent = new Intent(LaunchActivity.this, MainActivity.class);
+                    Intent intent = new Intent(LaunchActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
             }
