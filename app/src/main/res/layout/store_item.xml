@@ -12,7 +12,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:src="@drawable/outline_storefront_24" />
+        android:src="@drawable/icon_store" />
 
     <TextView
         android:id="@+id/name"

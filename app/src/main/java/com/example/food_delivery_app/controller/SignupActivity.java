@@ -68,9 +68,9 @@ public class SignupActivity extends AppCompatActivity {
                                     Toast.makeText(SignupActivity.this, "Tài khoản đã tồn tại!", Toast.LENGTH_SHORT).show();
                                 } else {
                                     int id = 1;
+                                    id++;
                                     User user = new User(id, name, phone, null, null, null, password);
                                     users.child(phone).setValue(user);
-                                    id++;
 
                                     Toast.makeText(SignupActivity.this, "Tạo tài khoản thành công!", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(SignupActivity.this, LoginActivity.class);

@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/homes"
-        android:icon="@drawable/icon_fork_knife"
+        android:icon="@drawable/icon_home"
         android:title="Trang chủ" />
 
     <item
-        android:id="@+id/wishlist"
-        android:icon="@drawable/outline_storefront_24"
+        android:id="@+id/stores"
+        android:icon="@drawable/icon_store"
         android:title="Cửa hàng" />
 
     <item
-        android:id="@+id/myOrder"
-        android:icon="@drawable/icon_shopping_bag"
+        android:id="@+id/my_order"
+        android:icon="@drawable/icon_order"
         android:title="Đơn hàng" />
 
     <item

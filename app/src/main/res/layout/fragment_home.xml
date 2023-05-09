@@ -3,17 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_lighting"
     tools:context=".fragment.HomeFragment">
 
-    <EditText
+    <!-- Header -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="Bạn cần tìm gì hôm nay"
-        android:inputType="text"
-        android:layout_margin="20dp"
-        android:padding="8dp"
-        android:background="@drawable/border_search"
-        android:drawableLeft="@drawable/ic_search_black_24dp"
-        android:drawablePadding="8dp"/>
+        android:layout_height="70dp"
+        android:background="@color/white"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:text="Sample Restaurant"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <!-- Body -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="70dp">
+
+    </ScrollView>
 
 </FrameLayout>
