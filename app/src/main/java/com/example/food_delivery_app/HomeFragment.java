@@ -1,4 +1,4 @@
-package com.example.food_delivery_app.fragment;
+package com.example.food_delivery_app;
 
 import android.os.Bundle;
 
@@ -10,11 +10,10 @@ import android.view.ViewGroup;
 
 import com.example.food_delivery_app.R;
 
-public class OrderHistoryFragment extends Fragment {
-
+public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_order_history, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         return view;
     }
 }

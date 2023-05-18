@@ -1,19 +1,20 @@
-package com.example.food_delivery_app.controller;
+package com.example.food_delivery_app;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.food_delivery_app.R;
 import com.example.food_delivery_app.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -34,11 +35,15 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
     ImageView btnGoogle, btnFacebook;
+    ProgressBar progressBar;
+
+    static final int RC_SIGN_IN = 1000;
 
     // User DAO
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     final DatabaseReference users = database.getReference("users");
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         btnForgotPass = findViewById(R.id.forgotPass);
         btnGoogle = findViewById(R.id.login_google);
         btnFacebook = findViewById(R.id.login_facebook);
+        progressBar = findViewById(R.id.progressBar);
 
         // Google Sign in
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
@@ -123,11 +129,13 @@ public class LoginActivity extends AppCompatActivity {
             users.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    progressBar.setVisibility(View.VISIBLE);
                     if (snapshot.child(phone).exists()) {
                         User user = snapshot.child(phone).getValue(User.class);
                         user.setPhone(phone);
 
                         if (user.getPassword().equals(password)) {
+                            progressBar.setVisibility(View.GONE);
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //                                    Common.currentUser = user;
                             startActivity(intent);
@@ -152,35 +160,30 @@ public class LoginActivity extends AppCompatActivity {
     // Login with Google
     private void logInWithGoogle() {
         Intent logInIntent = gsc.getSignInIntent();
-        startActivityForResult(logInIntent, 1000);
+        startActivityForResult(logInIntent, RC_SIGN_IN);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1000) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 task.getResult(ApiException.class);
                 navigateToSecondActivity();
             } catch (ApiException e) {
-                Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Đăng nhập thất bại!", Toast.LENGTH_SHORT).show();
             }
         }
+
     }
 
     // Switch to main activity
     private void navigateToSecondActivity() {
-        finish();
         Intent intent = new Intent(LoginActivity.this, AboutUsActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
-    }
 }

@@ -1,5 +1,6 @@
-package com.example.food_delivery_app.controller;
+package com.example.food_delivery_app;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,15 +12,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.food_delivery_app.R;
-import com.example.food_delivery_app.fragment.AccountFragment;
-import com.example.food_delivery_app.fragment.OrderFragment;
-import com.example.food_delivery_app.fragment.HomeFragment;
-import com.example.food_delivery_app.fragment.StoreFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -72,6 +67,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             return true;
         });
+
+        // Press back key
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish();
+            }
+        };
+        MainActivity.this.getOnBackPressedDispatcher().addCallback(this, callback);
+
     }
 
     // Replace Fragment for bottom nav

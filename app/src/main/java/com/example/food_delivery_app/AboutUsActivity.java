@@ -1,5 +1,6 @@
-package com.example.food_delivery_app.controller;
+package com.example.food_delivery_app;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,14 +9,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.food_delivery_app.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -24,6 +24,7 @@ public class AboutUsActivity extends AppCompatActivity {
     GoogleSignInClient gsc;
     TextView name, email;
     Button btnLogout;
+    ImageView btnBack;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -31,13 +32,16 @@ public class AboutUsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_us);
 
+        // Google Sign in
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
 
         name = findViewById(R.id.name);
         email = findViewById(R.id.per_email);
         btnLogout = findViewById(R.id.btnLogout);
+        btnBack = findViewById(R.id.back);
 
+        // Set name and email
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
             String perName = account.getDisplayName();
@@ -47,20 +51,42 @@ public class AboutUsActivity extends AppCompatActivity {
             email.setText(perEmail);
         }
 
+        // Button log-out
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 logout();
             }
         });
+
+        // Button back
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AboutUsActivity.this, MainActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+            }
+        });
+
+        // Press back key
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finish();
+            }
+        };
+        AboutUsActivity.this.getOnBackPressedDispatcher().addCallback(this, callback);
+
     }
 
+    // Log-out
     private void logout() {
         gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                finish();
-                startActivity(new Intent(AboutUsActivity.this, LoginActivity.class));
+                Intent intent = new Intent(AboutUsActivity.this, LoginActivity.class);
+                startActivity(intent);
                 overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
             }
         });
