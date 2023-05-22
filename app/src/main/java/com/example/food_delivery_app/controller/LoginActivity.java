@@ -1,12 +1,15 @@
-package com.example.food_delivery_app;
+package com.example.food_delivery_app.controller;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.food_delivery_app.common.Common;
+import com.example.food_delivery_app.R;
+import com.example.food_delivery_app.common.LoadingDialog;
 import com.example.food_delivery_app.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -35,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
     ImageView btnGoogle, btnFacebook;
-    ProgressBar progressBar;
 
     static final int RC_SIGN_IN = 1000;
 
@@ -43,7 +48,6 @@ public class LoginActivity extends AppCompatActivity {
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     final DatabaseReference users = database.getReference("users");
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +60,8 @@ public class LoginActivity extends AppCompatActivity {
         btnForgotPass = findViewById(R.id.forgotPass);
         btnGoogle = findViewById(R.id.login_google);
         btnFacebook = findViewById(R.id.login_facebook);
-        progressBar = findViewById(R.id.progressBar);
+
+        final LoadingDialog loadingDialog = new LoadingDialog(LoginActivity.this);
 
         // Google Sign in
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
@@ -68,6 +73,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 logIn();
+                loadingDialog.startLoadingDialog();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadingDialog.dismissDialog();
+                    }
+                }, 1000);
             }
         });
 
@@ -96,6 +109,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 logInWithGoogle();
+                loadingDialog.startLoadingDialog();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadingDialog.dismissDialog();
+                    }
+                }, 1000);
             }
         });
 
@@ -129,15 +150,13 @@ public class LoginActivity extends AppCompatActivity {
             users.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    progressBar.setVisibility(View.VISIBLE);
                     if (snapshot.child(phone).exists()) {
                         User user = snapshot.child(phone).getValue(User.class);
                         user.setPhone(phone);
 
                         if (user.getPassword().equals(password)) {
-                            progressBar.setVisibility(View.GONE);
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                                    Common.currentUser = user;
+                            Common.currentUser = user;
                             startActivity(intent);
                             overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);                        ;
                             finish();
@@ -173,17 +192,30 @@ public class LoginActivity extends AppCompatActivity {
                 task.getResult(ApiException.class);
                 navigateToSecondActivity();
             } catch (ApiException e) {
-                Toast.makeText(getApplicationContext(), "Đăng nhập thất bại!", Toast.LENGTH_SHORT).show();
+                cancelGoogleSignIn();
             }
         }
-
     }
 
     // Switch to main activity
     private void navigateToSecondActivity() {
-        Intent intent = new Intent(LoginActivity.this, AboutUsActivity.class);
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
     }
 
+    // Confirm message when Google sign-in failed
+    private void cancelGoogleSignIn() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
+        alertDialog.setTitle("Đăng Nhập");
+        alertDialog.setMessage("Đăng nhập Google không thành công");
+
+        alertDialog.setNegativeButton("Xác nhận", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        alertDialog.show();
+    }
 }

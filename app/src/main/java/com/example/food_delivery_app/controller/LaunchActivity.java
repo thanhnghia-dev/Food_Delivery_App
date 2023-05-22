@@ -1,4 +1,4 @@
-package com.example.food_delivery_app;
+package com.example.food_delivery_app.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.food_delivery_app.databinding.ActivityLoginBinding;
+import com.example.food_delivery_app.R;
 
 public class LaunchActivity extends AppCompatActivity {
 

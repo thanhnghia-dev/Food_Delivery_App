@@ -1,4 +1,4 @@
-package com.example.food_delivery_app;
+package com.example.food_delivery_app.controller;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -15,12 +15,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.food_delivery_app.fragment.AccountFragment;
+import com.example.food_delivery_app.fragment.HomeFragment;
+import com.example.food_delivery_app.fragment.OrderFragment;
+import com.example.food_delivery_app.R;
+import com.example.food_delivery_app.fragment.StoreFragment;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     BottomNavigationView bottomNav;
     DrawerLayout drawerLayout;
+    GoogleSignInOptions gso;
+    GoogleSignInClient gsc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        if (savedInstanceState == null) {
-            replaceFragment(new HomeFragment());
-            navigationView.setCheckedItem(R.id.menus);
-        }
+        navigationView.getMenu().findItem(R.id.menus).setChecked(true);
         replaceFragment(new HomeFragment());
 
         bottomNav.setSelectedItemId(R.id.bottom_nav);
@@ -79,17 +89,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    // Replace Fragment for bottom nav
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.frame_layout, fragment);
-        ft.commit();
-    }
-
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return super.onOptionsItemSelected(item);
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        // Google Sign in
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(this, gso);
+
+        int id = item.getItemId();
+
+        if (id == R.id.menus) {
+            replaceFragment(new HomeFragment());
+        }
+        else if (id == R.id.shopping_cart) {
+            replaceFragment(new OrderFragment());
+        }
+        else if (id == R.id.about_us) {
+            Intent intent = new Intent(MainActivity.this, AboutUsActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
+        }
+        else if (id == R.id.log_out) {
+            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+            if (account != null) {
+                gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                    }
+                });
+            }
+            else {
+                Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(login);
+                overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+            }
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override
@@ -101,29 +139,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    // Replace Fragment for bottom nav
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.frame_layout, fragment);
+        ft.commit();
+    }
+
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menus:
-                replaceFragment(new HomeFragment());
-                break;
-
-            case R.id.shopping_cart:
-                replaceFragment(new OrderFragment());
-                break;
-
-            case R.id.about_us:
-                Intent aboutIntent = new Intent(MainActivity.this, AboutUsActivity.class);
-                startActivity(aboutIntent);
-                break;
-
-            case R.id.log_out:
-                Intent login = new Intent(MainActivity.this, LoginActivity.class);
-                login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(login);
-                break;
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
+    protected void onPause() {
+        super.onPause();
+        finish();
     }
 }

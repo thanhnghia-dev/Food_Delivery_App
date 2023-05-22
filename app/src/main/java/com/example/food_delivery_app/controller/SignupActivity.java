@@ -1,4 +1,4 @@
-package com.example.food_delivery_app;
+package com.example.food_delivery_app.controller;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.food_delivery_app.R;
 import com.example.food_delivery_app.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,7 +31,7 @@ public class SignupActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%*^]).{8,15})"; //1 digit from 0-9, 1 lowercase char, 1 uppercase char, 1 special symbol, length min = 8, max = 15
-    final String PHONE_PATTERN = "(.{10,11})"; //length min = 6, max = 11
+    final String PHONE_PATTERN = "(.{10,11})"; // length min = 6, max = 11
 
     // User DAO
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -76,8 +77,8 @@ public class SignupActivity extends AppCompatActivity {
         finish();
     }
 
+    // Register a new account
     private void register() {
-        int id = 0;
         String name = edtName.getText().toString();
         String phone = edtPhone.getText().toString();
         String password = edtPass.getText().toString();

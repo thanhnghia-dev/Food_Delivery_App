@@ -1,4 +1,4 @@
-package com.example.food_delivery_app;
+package com.example.food_delivery_app.controller;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.food_delivery_app.R;
 import com.example.food_delivery_app.model.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

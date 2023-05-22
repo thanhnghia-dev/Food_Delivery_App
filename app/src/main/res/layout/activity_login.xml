@@ -60,13 +60,6 @@
                 android:drawableLeft="@drawable/baseline_lock_24"
                 android:drawablePadding="8dp"/>
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:visibility="gone"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
             <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
@@ -110,6 +103,7 @@
                     android:textColor="@color/red_strong"
                     android:textSize="15sp"
                     android:layout_toRightOf="@id/noti"/>
+
             </RelativeLayout>
 
             <TextView

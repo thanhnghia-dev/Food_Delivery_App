@@ -1,4 +1,4 @@
-package com.example.food_delivery_app;
+package com.example.food_delivery_app.fragment;
 
 import android.os.Bundle;
 
@@ -10,11 +10,10 @@ import android.view.ViewGroup;
 
 import com.example.food_delivery_app.R;
 
-public class StoreFragment extends Fragment {
-
+public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_store, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         return view;
     }
 }
