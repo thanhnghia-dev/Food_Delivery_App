@@ -61,8 +61,6 @@ public class LoginActivity extends AppCompatActivity {
         btnGoogle = findViewById(R.id.login_google);
         btnFacebook = findViewById(R.id.login_facebook);
 
-        final LoadingDialog loadingDialog = new LoadingDialog(LoginActivity.this);
-
         // Google Sign in
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(this, gso);
@@ -73,14 +71,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 logIn();
-                loadingDialog.startLoadingDialog();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadingDialog.dismissDialog();
-                    }
-                }, 1000);
             }
         });
 
@@ -109,14 +99,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 logInWithGoogle();
-                loadingDialog.startLoadingDialog();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadingDialog.dismissDialog();
-                    }
-                }, 1000);
             }
         });
 

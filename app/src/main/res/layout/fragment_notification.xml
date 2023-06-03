@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.OrderFragment">
+    tools:context=".fragment.NotificationFragment">
 
     <!-- Header -->
     <RelativeLayout
@@ -24,13 +24,13 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:text="Đơn hàng"
-            android:layout_toRightOf="@+id/btnBack"
+            android:text="Thông báo"
             android:textColor="@color/black"
+            android:layout_toRightOf="@+id/btnBack"
             android:textSize="23sp" />
-
     </RelativeLayout>
 
+    <!-- Body -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

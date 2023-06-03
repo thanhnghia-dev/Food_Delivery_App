@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.OrderFragment">
+    tools:context=".fragment.MenuFragment">
 
     <!-- Header -->
     <RelativeLayout
@@ -24,18 +24,35 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:text="Đơn hàng"
-            android:layout_toRightOf="@+id/btnBack"
+            android:text="Food"
             android:textColor="@color/black"
+            android:layout_toRightOf="@+id/btnBack"
             android:textSize="23sp" />
-
     </RelativeLayout>
 
-    <ScrollView
+    <!-- Body -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="70dp"
+        android:gravity="center">
+
+        <SearchView
+            android:id="@+id/menu_search"
+            android:layout_width="333dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:iconifiedByDefault="false"
+            android:queryBackground="@null"
+            android:queryHint="Tìm kiếm tại đây"
+            android:background="@drawable/border_search"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_food"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="70dp">
-
-    </ScrollView>
+        android:layout_marginTop="135dp" />
 
 </FrameLayout>

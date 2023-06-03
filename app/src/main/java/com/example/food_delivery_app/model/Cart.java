@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class Cart implements Serializable {
     private int id;
-    private HashMap<String, Product> productList;
+    private HashMap<String, Food> productList;
     private User customer;
     private double totalMoney;
     private int quantity;
@@ -33,11 +33,11 @@ public class Cart implements Serializable {
         this.id = id;
     }
 
-    public HashMap<String, Product> getProductList() {
+    public HashMap<String, Food> getProductList() {
         return productList;
     }
 
-    public void setProductList(HashMap<String, Product> productList) {
+    public void setProductList(HashMap<String, Food> productList) {
         this.productList = productList;
     }
 

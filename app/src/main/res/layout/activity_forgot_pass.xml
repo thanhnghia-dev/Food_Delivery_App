@@ -51,6 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Tiếp tục"
+                android:textAllCaps="false"
                 android:textSize="17sp"
                 android:layout_margin="20dp"
                 android:layout_gravity="center"

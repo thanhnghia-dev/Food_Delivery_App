@@ -8,42 +8,126 @@
     <!-- Header -->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="70dp"
         android:background="@color/white"
         android:padding="16dp">
 
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:columnCount="1"
-            android:rowCount="1">
+            android:text="Thông tin cá nhân"
+            android:textColor="@color/black"
+            android:textSize="23sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Xin chào,"
-                android:textColor="@color/black"
-                android:textSize="23sp"/>
-
-            <TextView
-                android:id="@+id/fullName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="Your name"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-        </GridLayout>
+        <ImageView
+            android:id="@+id/more"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/baseline_more_vert_24"/>
     </RelativeLayout>
 
     <!-- Body -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
-        android:background="@color/gray_lighting">
+        android:layout_marginTop="70dp"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/avatar_image"
+                android:layout_marginTop="30dp"/>
+
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:rowCount="1"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Xin chào, "
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/my_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My name"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"/>
+            </GridLayout>
+
+            <TextView
+                android:id="@+id/fullName"
+                android:layout_width="333dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="Họ và tên"
+                android:textColor="@color/black"
+                android:paddingTop="15dp"
+                android:paddingLeft="30dp"
+                android:background="@drawable/border_account" />
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="333dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="Email"
+                android:textColor="@color/black"
+                android:paddingTop="15dp"
+                android:paddingLeft="30dp"
+                android:background="@drawable/border_account" />
+
+            <TextView
+                android:id="@+id/phone"
+                android:layout_width="333dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="Số điện thoại"
+                android:textColor="@color/black"
+                android:paddingTop="15dp"
+                android:paddingLeft="30dp"
+                android:background="@drawable/border_account" />
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="333dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="Địa chỉ"
+                android:textColor="@color/black"
+                android:paddingTop="15dp"
+                android:paddingLeft="30dp"
+                android:background="@drawable/border_account" />
+
+        </LinearLayout>
 
     </ScrollView>
 

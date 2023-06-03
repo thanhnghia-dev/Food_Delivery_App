@@ -16,14 +16,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.food_delivery_app.R;
+import com.example.food_delivery_app.controller.AboutUsActivity;
 import com.example.food_delivery_app.controller.MainActivity;
 
-public class OrderFragment extends Fragment {
+public class NotificationFragment extends Fragment {
     ImageView btnBack;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_order, container, false);
+        View view = inflater.inflate(R.layout.fragment_notification, container, false);
         return view;
     }
 

@@ -2,7 +2,7 @@ package com.example.food_delivery_app.model;
 
 import java.io.Serializable;
 
-public class Product implements Serializable {
+public class Food implements Serializable {
     private String id;
     private String name;
     private String image;
@@ -10,10 +10,10 @@ public class Product implements Serializable {
     private double price;
     private double discount;
 
-    public Product() {
+    public Food() {
     }
 
-    public Product(String id, String name, String image, int quantity, double price, double discount) {
+    public Food(String id, String name, String image, int quantity, double price, double discount) {
         this.id = id;
         this.name = name;
         this.image = image;

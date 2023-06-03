@@ -13,13 +13,17 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.food_delivery_app.fragment.AccountFragment;
+import com.example.food_delivery_app.fragment.CartFragment;
 import com.example.food_delivery_app.fragment.HomeFragment;
+import com.example.food_delivery_app.fragment.MenuFragment;
+import com.example.food_delivery_app.fragment.NotificationFragment;
 import com.example.food_delivery_app.fragment.OrderFragment;
 import com.example.food_delivery_app.R;
-import com.example.food_delivery_app.fragment.StoreFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
+    private long backPressedTime;
+    private Toast backToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView.getMenu().findItem(R.id.menus).setChecked(true);
         replaceFragment(new HomeFragment());
 
         bottomNav.setSelectedItemId(R.id.bottom_nav);
@@ -63,17 +68,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     replaceFragment(new HomeFragment());
                     break;
 
-                case R.id.my_order:
-                    replaceFragment(new OrderFragment());
+                case R.id.cart:
+                    replaceFragment(new CartFragment());
                     break;
 
-                case R.id.stores:
-                    replaceFragment(new StoreFragment());
-                    break;
 
                 case R.id.account:
                     replaceFragment(new AccountFragment());
                     break;
+
             }
             return true;
         });
@@ -98,10 +101,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.menus) {
-            replaceFragment(new HomeFragment());
+            replaceFragment(new MenuFragment());
         }
-        else if (id == R.id.shopping_cart) {
+        else if (id == R.id.my_order) {
             replaceFragment(new OrderFragment());
+        }
+        else if (id == R.id.notification) {
+            replaceFragment(new NotificationFragment());
         }
         else if (id == R.id.about_us) {
             Intent intent = new Intent(MainActivity.this, AboutUsActivity.class);
@@ -114,14 +120,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                        Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                        login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(login);
                         overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
                     }
                 });
             }
             else {
                 Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(login);
                 overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
             }
@@ -134,9 +142,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
+        } else if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            backToast.cancel();
             super.onBackPressed();
+            return;
+        } else {
+            backToast = Toast.makeText(getBaseContext(), "Back thêm 1 lần nữa để thoát", Toast.LENGTH_SHORT);
+            backToast.show();
         }
+        backPressedTime = System.currentTimeMillis();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
     }
 
     // Replace Fragment for bottom nav

@@ -36,7 +36,7 @@
             android:id="@+id/info_text"
             android:layout_width="match_parent"
             android:layout_height="330dp"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@drawable/avatar_image"/>
 
         <GridLayout
             android:layout_width="match_parent"

@@ -65,6 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Đăng nhập"
+                android:textAllCaps="false"
                 android:textSize="17sp"
                 android:layout_margin="20dp"
                 android:layout_gravity="center"
@@ -80,36 +81,10 @@
                 android:textSize="16sp"
                 android:layout_gravity="center"/>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/noti"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Bạn chưa có tài khoản?"
-                    android:textSize="15sp"/>
-
-                <TextView
-                    android:id="@+id/signUp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:text="Tạo tài khoản"
-                    android:textColor="@color/red_strong"
-                    android:textSize="15sp"
-                    android:layout_toRightOf="@id/noti"/>
-
-            </RelativeLayout>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-- hoặc --"
+                android:text="-- hoặc đăng nhập bằng --"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"/>
 
@@ -136,9 +111,33 @@
                     android:layout_alignParentRight="true"/>
             </LinearLayout>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    android:id="@+id/noti"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bạn chưa có tài khoản?"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/signUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Tạo tài khoản"
+                    android:textColor="@color/red_strong"
+                    android:textSize="15sp"
+                    android:layout_toRightOf="@id/noti"/>
+
+            </RelativeLayout>
+
         </LinearLayout>
 
     </ScrollView>
-
 
 </LinearLayout>

@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.food_delivery_app.model.Product;
+import com.example.food_delivery_app.model.Food;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +36,14 @@ public class ProductDAO extends SQLiteOpenHelper {
     }
 
     // Get all product
-    public List<Product> getAll() {
-        List<Product> result = new ArrayList<>();
+    public List<Food> getAll() {
+        List<Food> result = new ArrayList<>();
         SQLiteDatabase myDB = this.getReadableDatabase();
         String sql = "SELECT * FROM " + TABLE_NAME;
         Cursor cursor = myDB.rawQuery(sql, new String[]{});
         cursor.moveToNext();
 
-        Product product = new Product();
+        Food food = new Food();
         while (cursor.isAfterLast() == false) {
 
         }

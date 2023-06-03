@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.food_delivery_app.R;
@@ -27,6 +29,7 @@ import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity {
     EditText edtName, edtPhone, edtPass, edtConfPass;
+    TextView btnSignin;
     Button btnSignup;
     ProgressBar progressBar;
 
@@ -37,6 +40,7 @@ public class SignupActivity extends AppCompatActivity {
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     final DatabaseReference users = database.getReference("users");
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +51,7 @@ public class SignupActivity extends AppCompatActivity {
         edtPass = findViewById(R.id.edPassword);
         edtConfPass = findViewById(R.id.edRePass);
         btnSignup = findViewById(R.id.btnSignup);
+        btnSignin = findViewById(R.id.signIn);
         progressBar = findViewById(R.id.progressBar);
 
         // Button sign-up
@@ -58,6 +63,15 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
+        // Button sign-in
+        btnSignin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+            }
+        });
         // Press back key
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override

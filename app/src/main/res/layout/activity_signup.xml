@@ -100,12 +100,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:text="Tạo tài khoản"
+                android:textAllCaps="false"
                 android:textSize="17sp"
                 android:layout_margin="20dp"
                 android:layout_gravity="center"
                 android:background="@drawable/border_button"
                 android:textColor="@color/white"
                 android:textStyle="bold"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    android:id="@+id/noti"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bạn đã có tài khoản?"
+                    android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/signIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="Đăng nhập"
+                    android:textColor="@color/red_strong"
+                    android:textSize="15sp"
+                    android:layout_toRightOf="@id/noti"/>
+
+            </RelativeLayout>
 
         </LinearLayout>
 
