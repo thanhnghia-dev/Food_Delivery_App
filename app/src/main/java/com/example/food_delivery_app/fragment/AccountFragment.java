@@ -1,6 +1,9 @@
 package com.example.food_delivery_app.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -16,17 +19,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.food_delivery_app.common.Common;
 import com.example.food_delivery_app.R;
 import com.example.food_delivery_app.controller.ChangePassActivity;
 import com.example.food_delivery_app.controller.LoginActivity;
+import com.example.food_delivery_app.controller.MainActivity;
 import com.example.food_delivery_app.controller.UpdateProfileActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class AccountFragment extends Fragment {
     TextView tvFullName, tvWelcomeName, tvPhone, tvEmail, tvAddress;
@@ -94,6 +102,9 @@ public class AccountFragment extends Fragment {
             startActivity(intent);
             getActivity().overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
         }
+        else if (id == R.id.log_out) {
+            handleLogoutDialog();
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -103,7 +114,7 @@ public class AccountFragment extends Fragment {
             tvWelcomeName.setText(Common.currentUser.getName());
             tvFullName.setText(Common.currentUser.getName());
             tvPhone.setText(Common.currentUser.getPhone());
-            tvEmail.setText("Email");
+            tvEmail.setText(Common.currentUser.getEmail());
             tvAddress.setText(Common.currentUser.getAddress());
         }
     }
@@ -125,6 +136,53 @@ public class AccountFragment extends Fragment {
             tvPhone.setText("Số điện thoại");
             tvAddress.setText("Địa chỉ");
         }
+    }
+
+    // Handle display logout dialog
+    private void handleLogoutDialog() {
+        Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.custom_logout_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvMessage = dialog.findViewById(R.id.message);
+        Button btnYes = dialog.findViewById(R.id.btnYes);
+        Button btnNo = dialog.findViewById(R.id.btnNo);
+
+        tvMessage.setText("Bạn có chắc chắn muốn đăng xuất?");
+
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getActivity());
+                if (account != null) {
+                    gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Intent login = new Intent(getActivity(), LoginActivity.class);
+                            login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(login);
+                            getActivity().overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                        }
+                    });
+                }
+                else {
+                    Intent login = new Intent(getActivity(), LoginActivity.class);
+                    login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(login);
+                    getActivity().overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                }
+            }
+        });
+
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     // Replace Fragment for bottom nav

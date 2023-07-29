@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.NotificationFragment">
+    tools:context=".fragment.NotificationFragment"
+    android:background="@color/white">
 
     <!-- Header -->
     <RelativeLayout
@@ -17,7 +18,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/baseline_arrow_back_ios_black"/>
+            android:src="@drawable/baseline_arrow_back_24"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -34,7 +35,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="70dp">
+        android:layout_marginTop="70dp"
+        android:background="@color/white">
 
     </ScrollView>
 

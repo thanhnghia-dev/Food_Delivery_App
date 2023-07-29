@@ -3,6 +3,7 @@ package com.example.food_delivery_app.controller;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -11,11 +12,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.food_delivery_app.fragment.AccountFragment;
 import com.example.food_delivery_app.fragment.CartFragment;
@@ -24,6 +30,7 @@ import com.example.food_delivery_app.fragment.MenuFragment;
 import com.example.food_delivery_app.fragment.NotificationFragment;
 import com.example.food_delivery_app.fragment.OrderFragment;
 import com.example.food_delivery_app.R;
+import com.example.food_delivery_app.fragment.WishListFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -38,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
-    private long backPressedTime;
-    private Toast backToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,25 +65,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         replaceFragment(new HomeFragment());
+        bottomNav.getMenu().findItem(R.id.homes).setChecked(true);
 
-        bottomNav.setSelectedItemId(R.id.bottom_nav);
-        bottomNav.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.homes:
-                    replaceFragment(new HomeFragment());
-                    break;
+        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.homes:
+                        replaceFragment(new HomeFragment());
+                        break;
 
-                case R.id.cart:
-                    replaceFragment(new CartFragment());
-                    break;
+                    case R.id.cart:
+                        replaceFragment(new CartFragment());
+                        break;
 
+                    case R.id.account:
+                        replaceFragment(new AccountFragment());
+                        break;
 
-                case R.id.account:
-                    replaceFragment(new AccountFragment());
-                    break;
-
+                }
+                return true;
             }
-            return true;
         });
 
         // Press back key
@@ -106,6 +113,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.my_order) {
             replaceFragment(new OrderFragment());
         }
+        else if (id == R.id.wish_list) {
+            replaceFragment(new WishListFragment());
+        }
         else if (id == R.id.notification) {
             replaceFragment(new NotificationFragment());
         }
@@ -115,47 +125,68 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
         }
         else if (id == R.id.log_out) {
-            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-            if (account != null) {
-                gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Intent login = new Intent(MainActivity.this, LoginActivity.class);
-                        login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(login);
-                        overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
-                    }
-                });
-            }
-            else {
-                Intent login = new Intent(MainActivity.this, LoginActivity.class);
-                login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(login);
-                overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
-            }
+            handleLogoutDialog();
         }
-        drawerLayout.closeDrawer(GravityCompat.START);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else if (backPressedTime + 2000 > System.currentTimeMillis()) {
-            backToast.cancel();
-            super.onBackPressed();
-            return;
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
         } else {
-            backToast = Toast.makeText(getBaseContext(), "Back thêm 1 lần nữa để thoát", Toast.LENGTH_SHORT);
-            backToast.show();
+            super.onBackPressed();
         }
-        backPressedTime = System.currentTimeMillis();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+    // Handle display logout dialog
+    private void handleLogoutDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.custom_logout_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvMessage = dialog.findViewById(R.id.message);
+        Button btnYes = dialog.findViewById(R.id.btnYes);
+        Button btnNo = dialog.findViewById(R.id.btnNo);
+
+        tvMessage.setText("Bạn có chắc chắn muốn đăng xuất?");
+
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(MainActivity.this);
+                if (account != null) {
+                    gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                            login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(login);
+                            overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                        }
+                    });
+                }
+                else {
+                    Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                    login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(login);
+                    overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                }
+            }
+        });
+
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     // Replace Fragment for bottom nav
@@ -164,11 +195,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.frame_layout, fragment);
         ft.commit();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        finish();
     }
 }

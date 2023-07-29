@@ -7,10 +7,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.food_delivery_app.R;
+import com.example.food_delivery_app.fragment.FoodDetailFragment;
 import com.example.food_delivery_app.model.Food;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -23,8 +25,20 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<Food, FoodAdapter.FoodV
 
     @Override
     protected void onBindViewHolder(@NonNull FoodViewHolder holder, int position, @NonNull Food model) {
+        holder.foodType.setText(model.getCatId());
         holder.foodName.setText(model.getName());
         Glide.with(holder.foodImage.getContext()).load(model.getImage()).into(holder.foodImage);
+
+        holder.foodImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                activity.getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, new FoodDetailFragment(model.getCatId(), model.getName(), model.getPrice(), model.getImage()))
+                        .addToBackStack(null).commit();
+                activity.overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
+            }
+        });
     }
 
     @NonNull

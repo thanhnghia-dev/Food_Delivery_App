@@ -53,6 +53,9 @@
             android:iconifiedByDefault="false"
             android:queryBackground="@null"
             android:queryHint="Tìm kiếm tại đây"
+            android:searchHintIcon="@null"
+            android:closeIcon="@drawable/baseline_clear_24"
+            android:focusable="false"
             android:background="@drawable/border_search"/>
     </LinearLayout>
 

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.food_delivery_app.R;
 import com.example.food_delivery_app.controller.MainActivity;
@@ -28,6 +29,13 @@ public class FoodListFragment extends Fragment {
     ImageView btnBack;
     RecyclerView recyclerFood;
     FoodAdapter adapter;
+    String name, image;
+    TextView title;
+
+    public FoodListFragment(String name, String image) {
+        this.name = name;
+        this.image = image;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,6 +48,7 @@ public class FoodListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         btnBack = view.findViewById(R.id.btnBack);
+        title = view.findViewById(R.id.title);
         recyclerFood = view.findViewById(R.id.recycler_food);
 
         recyclerFood.setHasFixedSize(true);
@@ -53,11 +62,14 @@ public class FoodListFragment extends Fragment {
         adapter = new FoodAdapter(options);
         recyclerFood.setAdapter(adapter);
 
+        title.setText(name);
+
         // Button back
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 replaceFragment(new HomeFragment());
+                getActivity().overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
             }
         });
 
@@ -66,6 +78,7 @@ public class FoodListFragment extends Fragment {
             @Override
             public void handleOnBackPressed() {
                 replaceFragment(new HomeFragment());
+                getActivity().overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
             }
         };
         getActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);

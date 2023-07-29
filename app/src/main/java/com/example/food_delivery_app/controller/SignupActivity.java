@@ -120,9 +120,7 @@ public class SignupActivity extends AppCompatActivity {
                                 Toast.makeText(SignupActivity.this, "Mật khẩu không đúng!\nMật khẩu nên bao gồm:\n1 chữ số, 1 ký tự viết hoa, 1 ký tự đặc biệt\nĐộ dài tối thiểu = 8 ký tự", Toast.LENGTH_LONG).show();
                             } else {
                                 progressBar.setVisibility(View.GONE);
-                                int id = 0;
-                                id++;
-                                User user = new User(id, name, phone, null, null, null, password);
+                                User user = new User(name, phone, "", "", password);
                                 users.child(phone).setValue(user);
 
                                 Toast.makeText(SignupActivity.this, "Tạo tài khoản thành công!", Toast.LENGTH_SHORT).show();

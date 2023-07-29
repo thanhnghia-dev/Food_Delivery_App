@@ -17,9 +17,10 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/baseline_arrow_back_ios_black"/>
+            android:src="@drawable/baseline_arrow_back_24"/>
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -35,7 +36,8 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="70dp"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@color/white">
 
         <SearchView
             android:id="@+id/menu_search"
@@ -46,6 +48,9 @@
             android:iconifiedByDefault="false"
             android:queryBackground="@null"
             android:queryHint="Tìm kiếm tại đây"
+            android:searchHintIcon="@null"
+            android:closeIcon="@drawable/baseline_clear_24"
+            android:focusable="false"
             android:background="@drawable/border_search"/>
     </LinearLayout>
 
@@ -53,6 +58,7 @@
         android:id="@+id/recycler_food"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="135dp" />
+        android:layout_marginTop="135dp"
+        android:background="@color/white" />
 
 </FrameLayout>

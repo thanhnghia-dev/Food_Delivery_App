@@ -3,18 +3,18 @@ package com.example.food_delivery_app.model;
 import java.io.Serializable;
 
 public class Food implements Serializable {
-    private String id;
+    private String catId;
     private String name;
     private String image;
     private int quantity;
-    private double price;
-    private double discount;
+    private String price;
+    private String discount;
 
     public Food() {
     }
 
-    public Food(String id, String name, String image, int quantity, double price, double discount) {
-        this.id = id;
+    public Food(String catId, String name, String image, int quantity, String price, String discount) {
+        this.catId = catId;
         this.name = name;
         this.image = image;
         this.quantity = quantity;
@@ -22,12 +22,12 @@ public class Food implements Serializable {
         this.discount = discount;
     }
 
-    public String getId() {
-        return id;
+    public String getCatId() {
+        return catId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCatId(String catId) {
+        this.catId = catId;
     }
 
     public String getName() {
@@ -54,19 +54,19 @@ public class Food implements Serializable {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
-    public double getDiscount() {
+    public String getDiscount() {
         return discount;
     }
 
-    public void setDiscount(double discount) {
+    public void setDiscount(String discount) {
         this.discount = discount;
     }
 }

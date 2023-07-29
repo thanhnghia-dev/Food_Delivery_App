@@ -20,11 +20,11 @@
         <activity
             android:name=".controller.ChangePassActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".controller.UpdateProfileActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".controller.AboutUsActivity"
             android:exported="false"

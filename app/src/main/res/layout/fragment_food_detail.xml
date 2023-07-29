@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_lighting"
-    tools:context=".fragment.ProductDetailFragment">
+    tools:context=".fragment.FoodDetailFragment">
 
     <!-- Header -->
     <RelativeLayout
@@ -15,67 +14,141 @@
         android:padding="16dp">
 
         <ImageView
-            android:id="@+id/back"
+            android:id="@+id/btnBack"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/baseline_arrow_back_24"/>
+
+        <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@drawable/baseline_arrow_back_ios_black"/>
+            android:layout_marginStart="16dp"
+            android:text="Food"
+            android:textColor="@color/black"
+            android:layout_toRightOf="@+id/btnBack"
+            android:textSize="23sp" />
+
+        <ImageView
+            android:id="@+id/btnWishList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icons_favorite"/>
+
     </RelativeLayout>
 
     <!-- Body -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_marginTop="70dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@color/white">
+        android:layout_height="match_parent"
+        android:layout_marginTop="70dp"
+        android:background="@color/white">
 
         <ImageView
-            android:id="@+id/info_text"
+            android:id="@+id/foodImage"
             android:layout_width="match_parent"
             android:layout_height="330dp"
-            android:src="@drawable/avatar_image"/>
+            android:src="@drawable/image_food" />
 
-        <GridLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="346dp"
-            android:layout_marginRight="30dp"
-            android:columnCount="1"
-            android:rowCount="1">
+            android:clipToPadding="false">
 
-            <GridLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="47dp"
-                android:columnCount="1"
-                android:rowCount="1">
+                android:layout_height="match_parent"
+                android:layout_marginTop="260dp"
+                android:background="@drawable/border_holder"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/food_name"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/foodName"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Food name" />
+                    android:layout_margin="25dp"
+                    android:text="Food name"
+                    android:textColor="@color/black"
+                    android:textSize="22sp" />
 
-                <TextView
-                    android:id="@+id/price"
-                    android:layout_width="wrap_content"
+                <GridLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="69.000"
-                    android:textStyle="bold" />
+                    android:columnCount="2"
+                    android:rowCount="1"
+                    android:layout_marginLeft="25dp">
 
-            </GridLayout>
+                    <ImageView
+                        android:id="@+id/rating"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/baseline_star_outline_24"/>
 
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="Food description" />
+                    <TextView
+                        android:id="@+id/price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="180dp"
+                        android:text="30.000 đ"
+                        android:textColor="@color/black"
+                        android:textSize="31sp"
+                        android:textStyle="bold"/>
+                </GridLayout>
 
-        </GridLayout>
-    </androidx.cardview.widget.CardView>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="85dp"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/decrease"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/border_image"
+                        android:src="@drawable/baseline_remove_circle_50"/>
+
+                    <TextView
+                        android:id="@+id/quantity"
+                        android:layout_width="60dp"
+                        android:layout_height="40dp"
+                        android:layout_toRightOf="@id/decrease"
+                        android:layout_marginLeft="20dp"
+                        android:text="1"
+                        android:textAlignment="center"
+                        android:textSize="28sp"
+                        android:textColor="@color/black"/>
+
+                    <ImageButton
+                        android:id="@+id/increase"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/quantity"
+                        android:layout_marginLeft="20dp"
+                        android:background="@drawable/border_image"
+                        android:src="@drawable/baseline_add_circle_50"/>
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/btnAddToCart"
+                    android:layout_width="210dp"
+                    android:layout_height="50dp"
+                    android:text="Thêm vào giỏ hàng"
+                    android:textAllCaps="false"
+                    android:layout_marginTop="40dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/border_button"
+                    android:textColor="@color/white"/>
+            </LinearLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
 
 </FrameLayout>

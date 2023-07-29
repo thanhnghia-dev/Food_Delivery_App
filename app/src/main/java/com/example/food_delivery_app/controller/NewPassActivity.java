@@ -76,44 +76,41 @@ public class NewPassActivity extends AppCompatActivity {
         String confPassword = edtConfPass.getText().toString();
 
         if (password.isEmpty() || confPassword.isEmpty()) {
-            Toast.makeText(NewPassActivity.this, "Vui lòng không được để trống!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vui lòng không được để trống!", Toast.LENGTH_SHORT).show();
         } else {
-            if (!password.equals(confPassword)) {
-                Toast.makeText(NewPassActivity.this, "Mật khẩu không đúng!", Toast.LENGTH_SHORT).show();
-            } else {
-                users.addValueEventListener(new ValueEventListener() {
+            users.addValueEventListener(new ValueEventListener() {
 
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (!isPasswordValid(password)) {
-                            Toast.makeText(NewPassActivity.this, "Mật khẩu không đúng!\nMật khẩu nên bao gồm:\n1 chữ số, 1 ký tự viết hoa, 1 ký tự đặc biệt\nĐộ dài tối thiểu = 8 ký tự", Toast.LENGTH_LONG).show();
-                        } else {
-                            int id = 0;
-                            id++;
-                            User user = new User(id, Common.currentUser.getName(), Common.currentUser.getPhone(), null, null, null, password);
-                            users.child(password).setValue(user);
-
-                            Toast.makeText(NewPassActivity.this, "Thay đổi mật khẩu thành công!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(NewPassActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
-                        }
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (!password.equals(confPassword)) {
+                        Toast.makeText(NewPassActivity.this, "Mật khẩu không đúng!", Toast.LENGTH_SHORT).show();
                     }
+                    else if (!isPasswordValid(password)) {
+                        Toast.makeText(NewPassActivity.this, "Mật khẩu không đúng!\nMật khẩu nên bao gồm:\n1 chữ số, 1 ký tự viết hoa, 1 ký tự đặc biệt\nĐộ dài tối thiểu = 8 ký tự", Toast.LENGTH_LONG).show();
+                    } else {
+//                        User user = new User(Common.currentUser.getName(), Common.currentUser.getPhone(), Common.currentUser.getEmail(), Common.currentUser.getAddress(), password);
+//                        users.child(phone).setValue(user);
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
+                        Toast.makeText(NewPassActivity.this, "Thay đổi mật khẩu thành công!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(NewPassActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
                     }
+                }
 
-                    public boolean isPasswordValid(final String password) {
-                        Pattern pattern;
-                        Matcher matcher;
-                        pattern = Pattern.compile(PASSWORD_PATTERN);
-                        matcher = pattern.matcher(password);
-                        return matcher.matches();
-                    }
-                });
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+
+                public boolean isPasswordValid(final String password) {
+                    Pattern pattern;
+                    Matcher matcher;
+                    pattern = Pattern.compile(PASSWORD_PATTERN);
+                    matcher = pattern.matcher(password);
+                    return matcher.matches();
+                }
+            });
         }
     }
 }
