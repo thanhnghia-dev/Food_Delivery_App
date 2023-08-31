@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,7 @@ import java.util.regex.Pattern;
 public class NewPassActivity extends AppCompatActivity {
     EditText edtConfPass, edtPass;
     Button btnSave;
+    ProgressDialog progressDialog;
     final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%*^]).{8,15})"; //1 digit from 0-9, 1 lowercase char, 1 uppercase char, 1 special symbol, length min = 8, max = 15
 
     // User DAO
@@ -42,6 +44,7 @@ public class NewPassActivity extends AppCompatActivity {
         edtPass = findViewById(R.id.edPassword);
         edtConfPass = findViewById(R.id.edRePass);
         btnSave = findViewById(R.id.btnSave);
+        progressDialog = new ProgressDialog(this);
 
         // Button save
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +78,8 @@ public class NewPassActivity extends AppCompatActivity {
         String password = edtPass.getText().toString();
         String confPassword = edtConfPass.getText().toString();
 
+        progressDialog.setMessage("Chờ xíu...");
+        progressDialog.show();
         if (password.isEmpty() || confPassword.isEmpty()) {
             Toast.makeText(this, "Vui lòng không được để trống!", Toast.LENGTH_SHORT).show();
         } else {
@@ -84,9 +89,11 @@ public class NewPassActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (!password.equals(confPassword)) {
                         Toast.makeText(NewPassActivity.this, "Mật khẩu không đúng!", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     }
                     else if (!isPasswordValid(password)) {
                         Toast.makeText(NewPassActivity.this, "Mật khẩu không đúng!\nMật khẩu nên bao gồm:\n1 chữ số, 1 ký tự viết hoa, 1 ký tự đặc biệt\nĐộ dài tối thiểu = 8 ký tự", Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
                     } else {
 //                        User user = new User(Common.currentUser.getName(), Common.currentUser.getPhone(), Common.currentUser.getEmail(), Common.currentUser.getAddress(), password);
 //                        users.child(phone).setValue(user);
@@ -95,6 +102,7 @@ public class NewPassActivity extends AppCompatActivity {
                         Intent intent = new Intent(NewPassActivity.this, LoginActivity.class);
                         startActivity(intent);
                         overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                        progressDialog.dismiss();
                     }
                 }
 

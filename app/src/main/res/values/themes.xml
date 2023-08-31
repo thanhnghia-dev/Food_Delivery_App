@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Food_Delivery_App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Food_Delivery_App" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/red_strong</item>
         <item name="colorPrimaryVariant">@color/red_strong</item>

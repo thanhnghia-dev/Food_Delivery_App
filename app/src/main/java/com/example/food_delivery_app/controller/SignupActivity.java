@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,7 +32,7 @@ public class SignupActivity extends AppCompatActivity {
     EditText edtName, edtPhone, edtPass, edtConfPass;
     TextView btnSignin;
     Button btnSignup;
-    ProgressBar progressBar;
+    ProgressDialog progressDialog;
 
     final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%*^]).{8,15})"; //1 digit from 0-9, 1 lowercase char, 1 uppercase char, 1 special symbol, length min = 8, max = 15
     final String PHONE_PATTERN = "(.{10,11})"; // length min = 6, max = 11
@@ -52,7 +53,7 @@ public class SignupActivity extends AppCompatActivity {
         edtConfPass = findViewById(R.id.edRePass);
         btnSignup = findViewById(R.id.btnSignup);
         btnSignin = findViewById(R.id.signIn);
-        progressBar = findViewById(R.id.progressBar);
+        progressDialog = new ProgressDialog(this);
 
         // Button sign-up
         btnSignup.setOnClickListener(new View.OnClickListener() {
@@ -98,28 +99,33 @@ public class SignupActivity extends AppCompatActivity {
         String password = edtPass.getText().toString();
         String confPassword = edtConfPass.getText().toString();
 
+        progressDialog.setMessage("Chờ xíu...");
+        progressDialog.show();
         if (name.isEmpty() || phone.isEmpty() || password.isEmpty() || confPassword.isEmpty()) {
             Toast.makeText(SignupActivity.this, "Vui lòng không được để trống!", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
         }
         else {
             if (!password.equals(confPassword)) {
                 Toast.makeText(SignupActivity.this, "Mật khẩu không đúng!", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
             } else {
                 users.addValueEventListener(new ValueEventListener() {
 
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        progressBar.setVisibility(View.VISIBLE);
                         if (snapshot.child(phone).exists()) {
                             Toast.makeText(SignupActivity.this, "Tài khoản đã tồn tại!", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         } else {
                             if (!isPhoneValid(phone)) {
                                 Toast.makeText(SignupActivity.this, "Số điện thoại phải đủ 10 chữ số!", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
                             else if (!isPasswordValid(password)) {
                                 Toast.makeText(SignupActivity.this, "Mật khẩu không đúng!\nMật khẩu nên bao gồm:\n1 chữ số, 1 ký tự viết hoa, 1 ký tự đặc biệt\nĐộ dài tối thiểu = 8 ký tự", Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
                             } else {
-                                progressBar.setVisibility(View.GONE);
                                 User user = new User(name, phone, "", "", password);
                                 users.child(phone).setValue(user);
 
@@ -127,6 +133,7 @@ public class SignupActivity extends AppCompatActivity {
                                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                                progressDialog.dismiss();
                             }
                         }
                     }

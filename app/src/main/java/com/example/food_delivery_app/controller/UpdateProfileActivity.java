@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -37,6 +38,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     Button btnSave;
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
+    ProgressDialog progressDialog;
 
     // User DAO
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -54,6 +56,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         etAddress = findViewById(R.id.address);
         btnSave = findViewById(R.id.btnSave);
         btnBack = findViewById(R.id.btnBack);
+        progressDialog = new ProgressDialog(this);
 
         // Load user information
         manualLogIn();
@@ -97,8 +100,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
         String phone = etPhone.getText().toString();
         String address = etAddress.getText().toString();
 
+        progressDialog.setMessage("Chờ xíu...");
+        progressDialog.show();
         if (name.isEmpty() || phone.isEmpty() || email.isEmpty() || address.isEmpty()) {
             Toast.makeText(this, "Vui lòng không được để trống!", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
         }
         else {
             users.addValueEventListener(new ValueEventListener() {
@@ -109,8 +115,10 @@ public class UpdateProfileActivity extends AppCompatActivity {
                         users.child(phone).setValue(user);
 
                         Toast.makeText(UpdateProfileActivity.this, "Thông tin lưu thành công!", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     } else {
                         Toast.makeText(UpdateProfileActivity.this, "Tài khoản không tồn tại!", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     }
                 }
 

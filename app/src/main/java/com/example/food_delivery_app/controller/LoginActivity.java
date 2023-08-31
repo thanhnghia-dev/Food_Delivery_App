@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
     ImageView btnGoogle, btnFacebook;
+    ProgressDialog progressDialog;
 
     static final int RC_SIGN_IN = 1000;
 
@@ -60,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         btnForgotPass = findViewById(R.id.forgotPass);
         btnGoogle = findViewById(R.id.login_google);
         btnFacebook = findViewById(R.id.login_facebook);
+        progressDialog = new ProgressDialog(this);
 
         // Google Sign in
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
@@ -126,8 +129,11 @@ public class LoginActivity extends AppCompatActivity {
         String phone = edtPhone.getText().toString();
         String password = edtPass.getText().toString();
 
+        progressDialog.setMessage("Chờ xíu...");
+        progressDialog.show();
         if (phone.isEmpty() || password.isEmpty()) {
             Toast.makeText(LoginActivity.this, "Vui lòng không được để trống!", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
         } else {
             users.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -140,13 +146,16 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             Common.currentUser = user;
                             startActivity(intent);
-                            overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);                        ;
+                            overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
+                            progressDialog.dismiss();
                             finish();
                         } else {
                             Toast.makeText(LoginActivity.this, "Mật khẩu không đúng!", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                     } else {
                         Toast.makeText(LoginActivity.this, "Tài khoản chưa được đăng ký!", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     }
                 }
 
@@ -181,9 +190,13 @@ public class LoginActivity extends AppCompatActivity {
 
     // Switch to main activity
     private void navigateToSecondActivity() {
+        progressDialog.setMessage("Chờ xíu...");
+        progressDialog.show();
+
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
+        progressDialog.dismiss();
     }
 
     // Confirm message when Google sign-in failed
@@ -195,7 +208,7 @@ public class LoginActivity extends AppCompatActivity {
         alertDialog.setNegativeButton("Xác nhận", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                finish();
             }
         });
         alertDialog.show();

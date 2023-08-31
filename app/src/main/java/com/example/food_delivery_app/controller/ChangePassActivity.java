@@ -4,6 +4,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +29,7 @@ public class ChangePassActivity extends AppCompatActivity {
     ImageView btnBack;
     EditText edtOldPass, edtConfPass, edtPass;
     Button btnSave;
+    ProgressDialog progressDialog;
     final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%*^]).{8,15})"; //1 digit from 0-9, 1 lowercase char, 1 uppercase char, 1 special symbol, length min = 8, max = 15
 
     // User DAO
@@ -44,6 +46,7 @@ public class ChangePassActivity extends AppCompatActivity {
         edtConfPass = findViewById(R.id.edRePass);
         btnBack = findViewById(R.id.btnBack);
         btnSave = findViewById(R.id.btnSave);
+        progressDialog = new ProgressDialog(this);
 
         // Button save
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -83,8 +86,11 @@ public class ChangePassActivity extends AppCompatActivity {
         String confPassword = edtConfPass.getText().toString();
         String phone = Common.currentUser.getPhone();
 
+        progressDialog.setMessage("Chờ xíu...");
+        progressDialog.show();
         if (oldPassword.isEmpty() || password.isEmpty() || confPassword.isEmpty()) {
             Toast.makeText(this, "Vui lòng không được để trống!", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
         } else {
             users.addValueEventListener(new ValueEventListener() {
 
@@ -93,15 +99,19 @@ public class ChangePassActivity extends AppCompatActivity {
                     if (snapshot.child(phone).exists()) {
                         if (!oldPassword.equals(Common.currentUser.getPassword())) {
                             Toast.makeText(ChangePassActivity.this, "Mật khẩu không trùng khớp!", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                         else if (!password.equals(confPassword)) {
                             Toast.makeText(ChangePassActivity.this, "Mật khẩu không đúng!", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                         else if (password.equals(oldPassword) && confPassword.equals(oldPassword)) {
                             Toast.makeText(ChangePassActivity.this, "Mật khẩu mới không được trùng với mật khẩu cũ!", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                         else if (!isPasswordValid(password)) {
                             Toast.makeText(ChangePassActivity.this, "Mật khẩu không đúng!\nMật khẩu nên bao gồm:\n1 chữ số, 1 ký tự viết hoa, 1 ký tự đặc biệt\nĐộ dài tối thiểu = 8 ký tự", Toast.LENGTH_LONG).show();
+                            progressDialog.dismiss();
                         }
                         else {
                             User user = new User(Common.currentUser.getName(), phone, Common.currentUser.getEmail(), Common.currentUser.getAddress(), password);
@@ -111,9 +121,11 @@ public class ChangePassActivity extends AppCompatActivity {
                             Intent intent = new Intent(ChangePassActivity.this, LoginActivity.class);
                             startActivity(intent);
                             overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                            progressDialog.dismiss();
                         }
                     } else {
                         Toast.makeText(ChangePassActivity.this, "Tài khoản không tồn tại!", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     }
                 }
 
