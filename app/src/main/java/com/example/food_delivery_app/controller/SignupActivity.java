@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,12 +24,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity {
     EditText edtName, edtPhone, edtPass, edtConfPass;
-    TextView btnSignin;
+    TextView btnSignIn;
     Button btnSignup;
     ProgressDialog progressDialog;
 
@@ -52,7 +53,7 @@ public class SignupActivity extends AppCompatActivity {
         edtPass = findViewById(R.id.edPassword);
         edtConfPass = findViewById(R.id.edRePass);
         btnSignup = findViewById(R.id.btnSignup);
-        btnSignin = findViewById(R.id.signIn);
+        btnSignIn = findViewById(R.id.signIn);
         progressDialog = new ProgressDialog(this);
 
         // Button sign-up
@@ -65,7 +66,7 @@ public class SignupActivity extends AppCompatActivity {
         });
 
         // Button sign-in
-        btnSignin.setOnClickListener(new View.OnClickListener() {
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
@@ -114,26 +115,31 @@ public class SignupActivity extends AppCompatActivity {
 
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.child(phone).exists()) {
-                            Toast.makeText(SignupActivity.this, "Tài khoản đã tồn tại!", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
-                        } else {
-                            if (!isPhoneValid(phone)) {
-                                Toast.makeText(SignupActivity.this, "Số điện thoại phải đủ 10 chữ số!", Toast.LENGTH_SHORT).show();
-                                progressDialog.dismiss();
-                            }
-                            else if (!isPasswordValid(password)) {
-                                Toast.makeText(SignupActivity.this, "Mật khẩu không đúng!\nMật khẩu nên bao gồm:\n1 chữ số, 1 ký tự viết hoa, 1 ký tự đặc biệt\nĐộ dài tối thiểu = 8 ký tự", Toast.LENGTH_LONG).show();
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            if (snapshot.child(phone).exists()) {
+                                Toast.makeText(SignupActivity.this, "Tài khoản đã tồn tại!", Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                             } else {
-                                User user = new User(name, phone, "", "", password);
-                                users.child(phone).setValue(user);
+                                if (!isPhoneValid(phone)) {
+                                    Toast.makeText(SignupActivity.this, "Số điện thoại phải đủ 10 chữ số!", Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+                                } else if (!isPasswordValid(password)) {
+                                    Toast.makeText(SignupActivity.this, "Mật khẩu không đúng!\nMật khẩu nên bao gồm:\n1 chữ số, 1 ký tự viết hoa, 1 ký tự đặc biệt\nĐộ dài tối thiểu = 8 ký tự", Toast.LENGTH_LONG).show();
+                                    progressDialog.dismiss();
+                                } else {
+                                    LocalDateTime date = LocalDateTime.now();
+                                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                                    String createNow = date.format(formatter);
 
-                                Toast.makeText(SignupActivity.this, "Tạo tài khoản thành công!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
-                                progressDialog.dismiss();
+                                    User user = new User(name, phone, "", "", password, createNow);
+                                    users.child(phone).setValue(user);
+
+                                    Toast.makeText(SignupActivity.this, "Tạo tài khoản thành công!", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                                    progressDialog.dismiss();
+                                }
                             }
                         }
                     }

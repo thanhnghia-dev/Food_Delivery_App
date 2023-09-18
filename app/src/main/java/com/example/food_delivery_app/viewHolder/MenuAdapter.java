@@ -3,6 +3,7 @@ package com.example.food_delivery_app.viewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,7 +32,7 @@ public class MenuAdapter extends FirebaseRecyclerAdapter<Category, MenuAdapter.M
         holder.menuName.setText(model.getName());
         Glide.with(holder.imageView.getContext()).load(model.getImage()).into(holder.imageView);
 
-        holder.menuName.setOnClickListener(new View.OnClickListener() {
+        holder.menuView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
@@ -53,6 +54,7 @@ public class MenuAdapter extends FirebaseRecyclerAdapter<Category, MenuAdapter.M
     public static class MenuViewHolder extends RecyclerView.ViewHolder {
         TextView menuName;
         CircleImageView imageView, moveOn;
+        RelativeLayout menuView;
 
         public MenuViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,6 +62,7 @@ public class MenuAdapter extends FirebaseRecyclerAdapter<Category, MenuAdapter.M
             menuName = itemView.findViewById(R.id.foodName);
             imageView = itemView.findViewById(R.id.foodImage);
             moveOn = imageView.findViewById(R.id.move_on);
+            menuView = itemView.findViewById(R.id.menuView);
 
         }
     }

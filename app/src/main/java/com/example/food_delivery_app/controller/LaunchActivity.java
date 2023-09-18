@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import com.example.food_delivery_app.R;
@@ -15,23 +16,14 @@ public class LaunchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
 
-        Thread timing = new Thread() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
             public void run() {
-                try {
-                    sleep(1000);
-                } catch (Exception e) {
-                    Log.d("Test", "Error Start");
-                } finally {
-                    Intent intent = new Intent(LaunchActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(LaunchActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
-        };
-        timing.start();
-    }
-
-    protected void onPause() {
-        super.onPause();
-        finish();
+        }, 1000);
     }
 }

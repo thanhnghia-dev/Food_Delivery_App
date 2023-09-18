@@ -82,8 +82,9 @@ public class NewPassActivity extends AppCompatActivity {
         progressDialog.show();
         if (password.isEmpty() || confPassword.isEmpty()) {
             Toast.makeText(this, "Vui lòng không được để trống!", Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
         } else {
-            users.addValueEventListener(new ValueEventListener() {
+            users.orderByChild("phone").addValueEventListener(new ValueEventListener() {
 
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -96,7 +97,7 @@ public class NewPassActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                     } else {
 //                        User user = new User(Common.currentUser.getName(), Common.currentUser.getPhone(), Common.currentUser.getEmail(), Common.currentUser.getAddress(), password);
-//                        users.child(phone).setValue(user);
+//                        users.child("phone").setValue(user);
 
                         Toast.makeText(NewPassActivity.this, "Thay đổi mật khẩu thành công!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(NewPassActivity.this, LoginActivity.class);

@@ -22,12 +22,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.food_delivery_app.common.Common;
 import com.example.food_delivery_app.R;
 import com.example.food_delivery_app.controller.ChangePassActivity;
 import com.example.food_delivery_app.controller.LoginActivity;
-import com.example.food_delivery_app.controller.MainActivity;
 import com.example.food_delivery_app.controller.UpdateProfileActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -36,8 +36,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class AccountFragment extends Fragment {
     TextView tvFullName, tvWelcomeName, tvPhone, tvEmail, tvAddress;
+    CircleImageView profileImage;
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
 
@@ -56,7 +59,9 @@ public class AccountFragment extends Fragment {
         tvEmail = view.findViewById(R.id.email);
         tvPhone = view.findViewById(R.id.phone);
         tvAddress = view.findViewById(R.id.address);
+        profileImage = view.findViewById(R.id.profileImage);
 
+        // Check current user and load profile
         if (Common.currentUser.getName() == null) {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
@@ -65,6 +70,14 @@ public class AccountFragment extends Fragment {
             manualLogIn();
             GoogleLogIn();
         }
+
+        // Choose and upload profile image
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "This is my avatar", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // Press back key
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -147,8 +160,8 @@ public class AccountFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         TextView tvMessage = dialog.findViewById(R.id.message);
-        Button btnYes = dialog.findViewById(R.id.btnYes);
-        Button btnNo = dialog.findViewById(R.id.btnNo);
+        Button btnYes = dialog.findViewById(R.id.btnSend);
+        Button btnNo = dialog.findViewById(R.id.btnCancel);
 
         tvMessage.setText("Bạn có chắc chắn muốn đăng xuất?");
 

@@ -25,6 +25,7 @@ import com.example.food_delivery_app.dao.Database;
 import com.example.food_delivery_app.model.OrderDetail;
 import com.example.food_delivery_app.viewHolder.CartAdapter;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,9 +112,19 @@ public class DeliveryFragment extends Fragment {
 
     // Calculate discount
     private int discount() {
-        int fee = 0;
+        int discount = 0;
+        LocalDate date;
 
-        return fee;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            date = LocalDate.now();
+            int day = date.getDayOfMonth();
+            int month = date.getMonthValue();
+
+            if (day == month) {
+                discount = 20000;
+            }
+        }
+        return discount;
     }
 
     // Replace Fragment for bottom nav

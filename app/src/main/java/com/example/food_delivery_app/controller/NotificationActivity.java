@@ -3,28 +3,31 @@ package com.example.food_delivery_app.controller;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.example.food_delivery_app.R;
+import com.example.food_delivery_app.fragment.HomeFragment;
 
-public class AboutUsActivity extends AppCompatActivity {
+public class NotificationActivity extends AppCompatActivity {
     ImageView btnBack;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about_us);
+        setContentView(R.layout.activity_notification);
 
-        btnBack = findViewById(R.id.back);
+        btnBack = findViewById(R.id.btnBack);
 
         // Button back
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AboutUsActivity.this, MainActivity.class);
+                Intent intent = new Intent(NotificationActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
@@ -33,16 +36,11 @@ public class AboutUsActivity extends AppCompatActivity {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                Intent intent = new Intent(AboutUsActivity.this, MainActivity.class);
+                Intent intent = new Intent(NotificationActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         };
-        AboutUsActivity.this.getOnBackPressedDispatcher().addCallback(this, callback);
+        NotificationActivity.this.getOnBackPressedDispatcher().addCallback(this, callback);
 
-    }
-
-    protected void onPause() {
-        super.onPause();
-        finish();
     }
 }

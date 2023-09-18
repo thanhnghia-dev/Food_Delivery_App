@@ -32,6 +32,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class UpdateProfileActivity extends AppCompatActivity {
     ImageView btnBack;
     EditText etFullName, etPhone, etEmail, etAddress;
@@ -110,15 +113,21 @@ public class UpdateProfileActivity extends AppCompatActivity {
             users.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.child(phone).exists()) {
-                        User user = new User(name, phone, email, address, Common.currentUser.getPassword());
-                        users.child(phone).setValue(user);
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        if (snapshot.child(phone).exists()) {
+                            LocalDateTime date = LocalDateTime.now();
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                            String createNow = date.format(formatter);
 
-                        Toast.makeText(UpdateProfileActivity.this, "Thông tin lưu thành công!", Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
-                    } else {
-                        Toast.makeText(UpdateProfileActivity.this, "Tài khoản không tồn tại!", Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
+                            User user = new User(name, phone, email, address, Common.currentUser.getPassword(), createNow);
+                            users.child(phone).setValue(user);
+
+                            Toast.makeText(UpdateProfileActivity.this, "Thông tin lưu thành công!", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                        } else {
+                            Toast.makeText(UpdateProfileActivity.this, "Tài khoản không tồn tại!", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                        }
                     }
                 }
 
@@ -137,6 +146,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
             etEmail.setText(Common.currentUser.getEmail());
             etPhone.setText(Common.currentUser.getPhone());
             etAddress.setText(Common.currentUser.getAddress());
+
+            etPhone.setEnabled(false);
         }
     }
 

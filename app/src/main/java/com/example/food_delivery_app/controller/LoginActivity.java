@@ -5,35 +5,40 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.food_delivery_app.common.Common;
 import com.example.food_delivery_app.R;
-import com.example.food_delivery_app.common.LoadingDialog;
 import com.example.food_delivery_app.model.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     EditText edtPhone, edtPass;
@@ -43,8 +48,9 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient gsc;
     ImageView btnGoogle, btnFacebook;
     ProgressDialog progressDialog;
+    FirebaseAuth auth;
 
-    static final int RC_SIGN_IN = 1000;
+    private static final int RC_SIGN_IN = 9001;
 
     // User DAO
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -65,8 +71,20 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
 
         // Google Sign in
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        auth = FirebaseAuth.getInstance();
+
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+
         gsc = GoogleSignIn.getClient(this, gso);
+
+        // Check Firebase user is activated
+        if (auth.getCurrentUser() != null) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
+            finish();
+        }
 
         // Button log-in
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -101,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
         btnGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logInWithGoogle();
+                googleSignIn();
             }
         });
 
@@ -168,9 +186,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // Login with Google
-    private void logInWithGoogle() {
-        Intent logInIntent = gsc.getSignInIntent();
-        startActivityForResult(logInIntent, RC_SIGN_IN);
+    private void googleSignIn() {
+        Intent intent = gsc.getSignInIntent();
+        startActivityForResult(intent, RC_SIGN_IN);
     }
 
     @Override
@@ -180,23 +198,37 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                task.getResult(ApiException.class);
-                navigateToSecondActivity();
-            } catch (ApiException e) {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (Exception e) {
                 cancelGoogleSignIn();
             }
         }
     }
 
-    // Switch to main activity
-    private void navigateToSecondActivity() {
-        progressDialog.setMessage("Chờ xíu...");
-        progressDialog.show();
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        auth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = auth.getCurrentUser();
 
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
-        progressDialog.dismiss();
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("id", user.getUid());
+                    map.put("name", user.getDisplayName());
+                    map.put("phone", user.getPhoneNumber());
+                    map.put("profile", user.getPhotoUrl().toString());
+
+                    users.child(user.getUid()).setValue(map);
+
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(LoginActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     // Confirm message when Google sign-in failed
@@ -208,7 +240,7 @@ public class LoginActivity extends AppCompatActivity {
         alertDialog.setNegativeButton("Xác nhận", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
+
             }
         });
         alertDialog.show();

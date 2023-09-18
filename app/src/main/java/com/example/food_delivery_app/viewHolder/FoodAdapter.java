@@ -34,7 +34,7 @@ public class FoodAdapter extends FirebaseRecyclerAdapter<Food, FoodAdapter.FoodV
             public void onClick(View view) {
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
                 activity.getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_layout, new FoodDetailFragment(model.getCatId(), model.getName(), model.getPrice(), model.getImage()))
+                        .replace(R.id.frame_layout, new FoodDetailFragment(model.getCatId(), model.getName(), model.getPrice(), model.getImage(), model.getQuantity()))
                         .addToBackStack(null).commit();
                 activity.overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
             }

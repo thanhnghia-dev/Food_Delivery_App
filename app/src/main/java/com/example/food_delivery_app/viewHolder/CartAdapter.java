@@ -51,11 +51,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.price.setText(listData.get(position).getPrice() + " \u20AB");
         Glide.with(holder.foodImage.getContext()).load(listData.get(position).getFoodImage()).into(holder.foodImage);
 
-        holder.foodName.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.trash.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View view) {
+            public void onClick(View view) {
                 displayClearCartDialog(position);
-                return true;
             }
         });
     }
@@ -74,8 +73,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         TextView tvMessage = dialog.findViewById(R.id.message);
-        Button btnYes = dialog.findViewById(R.id.btnYes);
-        Button btnNo = dialog.findViewById(R.id.btnNo);
+        Button btnYes = dialog.findViewById(R.id.btnSend);
+        Button btnNo = dialog.findViewById(R.id.btnCancel);
 
         tvMessage.setText("Bạn có muốn xóa khỏi giỏ hàng?");
 
@@ -103,7 +102,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     public static class CartViewHolder extends RecyclerView.ViewHolder {
         TextView foodName, quantity, price;
-        ImageView foodImage;
+        ImageView foodImage, trash;
 
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -112,6 +111,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             foodName = itemView.findViewById(R.id.foodName);
             quantity = itemView.findViewById(R.id.quantity);
             price = itemView.findViewById(R.id.price);
+            trash = itemView.findViewById(R.id.trash);
 
         }
     }

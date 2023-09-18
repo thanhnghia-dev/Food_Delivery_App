@@ -2,6 +2,7 @@ package com.example.food_delivery_app.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ import android.widget.Toast;
 
 import com.example.food_delivery_app.R;
 import com.example.food_delivery_app.common.Common;
+import com.example.food_delivery_app.controller.OrderActivity;
 import com.example.food_delivery_app.dao.Database;
 import com.example.food_delivery_app.model.Order;
 import com.example.food_delivery_app.model.OrderDetail;
@@ -35,6 +38,9 @@ import com.example.food_delivery_app.viewHolder.CartAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -102,18 +108,7 @@ public class CheckoutFragment extends Fragment {
         btnPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Order order = new Order(Common.currentUser.getName(),
-                                        Common.currentUser.getPhone(),
-                                        deliAddress.getText().toString(),
-                                        cart,
-                                        totalMoney.getText().toString());
-
-                orders.child(String.valueOf(System.currentTimeMillis())).setValue(order);
-
-                new Database(getContext()).clearCart();
-
-                replaceFragment(new SuccessFragment());
-                getActivity().overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                handleConfirmOrder();
             }
         });
 
@@ -155,6 +150,29 @@ public class CheckoutFragment extends Fragment {
         totalMoney.setText(total + " \u20AB");
     }
 
+    // Handle confirm order
+    private void handleConfirmOrder() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDateTime date = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            String createNow = date.format(formatter);
+
+            Order order = new Order(System.currentTimeMillis(),
+                    Common.currentUser.getName(),
+                    Common.currentUser.getPhone(),
+                    deliAddress.getText().toString(),
+                    cart,
+                    totalMoney.getText().toString(),
+                    createNow);
+
+            orders.child(String.valueOf(System.currentTimeMillis())).setValue(order);
+
+            new Database(getContext()).clearCart();
+
+            showSuccessDialog();
+        }
+    }
+
     // Load delivery address
     private String deliveryAddress() {
         String address = "";
@@ -173,8 +191,8 @@ public class CheckoutFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         EditText edAddress = dialog.findViewById(R.id.edAddress);
-        Button btnYes = dialog.findViewById(R.id.btnYes);
-        Button btnNo = dialog.findViewById(R.id.btnNo);
+        Button btnYes = dialog.findViewById(R.id.btnSend);
+        Button btnNo = dialog.findViewById(R.id.btnCancel);
 
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -224,9 +242,19 @@ public class CheckoutFragment extends Fragment {
 
     // Calculate discount
     private int discount() {
-        int fee = 0;
+        int discount = 0;
+        LocalDate date;
 
-        return fee;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            date = LocalDate.now();
+            int day = date.getDayOfMonth();
+            int month = date.getMonthValue();
+
+            if (day == month) {
+                discount = 20000;
+            }
+        }
+        return discount;
     }
 
     // Replace Fragment for bottom nav
@@ -235,5 +263,50 @@ public class CheckoutFragment extends Fragment {
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.frame_layout, fragment);
         ft.commit();
+    }
+
+    // Show bottom success dialog
+    private void showSuccessDialog() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.custom_success_dialog);
+        dialog.setCancelable(false);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+        Button btnOrder = dialog.findViewById(R.id.btnMyOrder);
+        TextView btnHome = dialog.findViewById(R.id.btnBackToHome);
+        ImageView btnClose = dialog.findViewById(R.id.btnClose);
+
+        // Button back home
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                replaceFragment(new HomeFragment());
+            }
+        });
+
+        // Button my order
+        btnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                Intent intent = new Intent(getActivity(), OrderActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // Button close
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                replaceFragment(new HomeFragment());
+            }
+        });
+        dialog.show();
     }
 }

@@ -41,7 +41,7 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/btnNo"
+                android:id="@+id/btnCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Đóng"
@@ -52,12 +52,14 @@
                 android:layout_margin="20dp"/>
 
             <Button
-                android:id="@+id/btnYes"
+                android:id="@+id/btnSend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Đồng ý"
+                android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textAllCaps="false"
+                android:backgroundTint="@color/red_strong"
                 android:layout_margin="20dp"/>
 
         </LinearLayout>

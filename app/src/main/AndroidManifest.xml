@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.food_delivery_app">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -16,7 +15,24 @@
         android:label="Food Delivery"
         android:supportsRtl="true"
         android:theme="@style/Theme.Food_Delivery_App"
+        tools:ignore="AppLinkUrlError"
         tools:targetApi="31">
+        <activity
+            android:name=".controller.NotificationActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".controller.WishListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".controller.OrderDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".controller.OrderActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".controller.ChangePassActivity"
             android:exported="false"
@@ -44,7 +60,18 @@
         <activity
             android:name=".controller.LoginActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="com.googleusercontent.apps.YOUR_CLIENT_ID"
+                    android:scheme="1:701131943835:android:4449495bd6e0802f193b3e" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".controller.MainActivity"
             android:exported="false"

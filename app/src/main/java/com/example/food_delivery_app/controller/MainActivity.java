@@ -3,7 +3,6 @@ package com.example.food_delivery_app.controller;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -27,10 +26,7 @@ import com.example.food_delivery_app.fragment.AccountFragment;
 import com.example.food_delivery_app.fragment.CartFragment;
 import com.example.food_delivery_app.fragment.HomeFragment;
 import com.example.food_delivery_app.fragment.MenuFragment;
-import com.example.food_delivery_app.fragment.NotificationFragment;
-import com.example.food_delivery_app.fragment.OrderFragment;
 import com.example.food_delivery_app.R;
-import com.example.food_delivery_app.fragment.WishListFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -73,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 switch (item.getItemId()) {
                     case R.id.homes:
                         replaceFragment(new HomeFragment());
+                        bottomNav.getMenu().findItem(R.id.homes).setChecked(true);
                         break;
 
                     case R.id.cart:
@@ -111,18 +108,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             replaceFragment(new MenuFragment());
         }
         else if (id == R.id.my_order) {
-            replaceFragment(new OrderFragment());
+            Intent intent = new Intent(MainActivity.this, OrderActivity.class);
+            startActivity(intent);
         }
         else if (id == R.id.wish_list) {
-            replaceFragment(new WishListFragment());
+            Intent intent = new Intent(MainActivity.this, WishListActivity.class);
+            startActivity(intent);
         }
         else if (id == R.id.notification) {
-            replaceFragment(new NotificationFragment());
+            Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
+            startActivity(intent);
         }
         else if (id == R.id.about_us) {
             Intent intent = new Intent(MainActivity.this, AboutUsActivity.class);
             startActivity(intent);
-            overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
         }
         else if (id == R.id.log_out) {
             handleLogoutDialog();
@@ -151,8 +150,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         TextView tvMessage = dialog.findViewById(R.id.message);
-        Button btnYes = dialog.findViewById(R.id.btnYes);
-        Button btnNo = dialog.findViewById(R.id.btnNo);
+        Button btnYes = dialog.findViewById(R.id.btnSend);
+        Button btnNo = dialog.findViewById(R.id.btnCancel);
 
         tvMessage.setText("Bạn có chắc chắn muốn đăng xuất?");
 

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.food_delivery_app.R;
@@ -31,6 +32,7 @@ public class FoodListFragment extends Fragment {
     FoodAdapter adapter;
     String name, image;
     TextView title;
+    SearchView searchView;
 
     public FoodListFragment(String name, String image) {
         this.name = name;
@@ -50,25 +52,36 @@ public class FoodListFragment extends Fragment {
         btnBack = view.findViewById(R.id.btnBack);
         title = view.findViewById(R.id.title);
         recyclerFood = view.findViewById(R.id.recycler_food);
+        searchView = view.findViewById(R.id.menu_search);
 
         recyclerFood.setHasFixedSize(true);
         recyclerFood.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Load food list
-        FirebaseRecyclerOptions<Food> options = new FirebaseRecyclerOptions.Builder<Food>()
-                .setQuery(FirebaseDatabase.getInstance().getReference().child("foods"), Food.class)
-                .build();
-
-        adapter = new FoodAdapter(options);
-        recyclerFood.setAdapter(adapter);
+        loadFoodList(name);
 
         title.setText(name);
+
+        // Search food
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String keyword) {
+                searchFood(keyword);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String keyword) {
+                searchFood(keyword);
+                return false;
+            }
+        });
 
         // Button back
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                replaceFragment(new HomeFragment());
+                replaceFragment(new MenuFragment());
                 getActivity().overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
             }
         });
@@ -77,7 +90,7 @@ public class FoodListFragment extends Fragment {
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                replaceFragment(new HomeFragment());
+                replaceFragment(new MenuFragment());
                 getActivity().overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
             }
         };
@@ -85,16 +98,32 @@ public class FoodListFragment extends Fragment {
 
     }
 
+    // Load food list
+    private void loadFoodList(String catId) {
+        FirebaseRecyclerOptions<Food> options = new FirebaseRecyclerOptions.Builder<Food>()
+                .setQuery(FirebaseDatabase.getInstance().getReference()
+                        .child("foods").orderByChild("catId").equalTo(catId), Food.class)
+                .build();
+
+        adapter = new FoodAdapter(options);
+        recyclerFood.setAdapter(adapter);
+    }
+
+    // Search food
+    private void searchFood(String keyword) {
+        FirebaseRecyclerOptions<Food> options = new FirebaseRecyclerOptions.Builder<Food>()
+                .setQuery(FirebaseDatabase.getInstance().getReference().child("foods")
+                        .orderByChild("name").startAt(keyword).endAt(keyword + "~"), Food.class)
+                .build();
+
+        adapter = new FoodAdapter(options);
+        recyclerFood.setAdapter(adapter);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
         adapter.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
     }
 
     // Replace Fragment for bottom nav

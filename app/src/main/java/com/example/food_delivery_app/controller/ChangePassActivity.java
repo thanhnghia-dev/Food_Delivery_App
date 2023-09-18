@@ -22,6 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,36 +98,38 @@ public class ChangePassActivity extends AppCompatActivity {
 
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.child(phone).exists()) {
-                        if (!oldPassword.equals(Common.currentUser.getPassword())) {
-                            Toast.makeText(ChangePassActivity.this, "Mật khẩu không trùng khớp!", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
-                        }
-                        else if (!password.equals(confPassword)) {
-                            Toast.makeText(ChangePassActivity.this, "Mật khẩu không đúng!", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
-                        }
-                        else if (password.equals(oldPassword) && confPassword.equals(oldPassword)) {
-                            Toast.makeText(ChangePassActivity.this, "Mật khẩu mới không được trùng với mật khẩu cũ!", Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
-                        }
-                        else if (!isPasswordValid(password)) {
-                            Toast.makeText(ChangePassActivity.this, "Mật khẩu không đúng!\nMật khẩu nên bao gồm:\n1 chữ số, 1 ký tự viết hoa, 1 ký tự đặc biệt\nĐộ dài tối thiểu = 8 ký tự", Toast.LENGTH_LONG).show();
-                            progressDialog.dismiss();
-                        }
-                        else {
-                            User user = new User(Common.currentUser.getName(), phone, Common.currentUser.getEmail(), Common.currentUser.getAddress(), password);
-                            users.child(phone).setValue(user);
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        if (snapshot.child(phone).exists()) {
+                            if (!oldPassword.equals(Common.currentUser.getPassword())) {
+                                Toast.makeText(ChangePassActivity.this, "Mật khẩu không trùng khớp!", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            } else if (!password.equals(confPassword)) {
+                                Toast.makeText(ChangePassActivity.this, "Mật khẩu không đúng!", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            } else if (password.equals(oldPassword) && confPassword.equals(oldPassword)) {
+                                Toast.makeText(ChangePassActivity.this, "Mật khẩu mới không được trùng với mật khẩu cũ!", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            } else if (!isPasswordValid(password)) {
+                                Toast.makeText(ChangePassActivity.this, "Mật khẩu không đúng!\nMật khẩu nên bao gồm:\n1 chữ số, 1 ký tự viết hoa, 1 ký tự đặc biệt\nĐộ dài tối thiểu = 8 ký tự", Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                            } else {
+                                LocalDateTime date = LocalDateTime.now();
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                                String createNow = date.format(formatter);
 
-                            Toast.makeText(ChangePassActivity.this, "Thay đổi mật khẩu thành công!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(ChangePassActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                                User user = new User(Common.currentUser.getName(), phone, Common.currentUser.getEmail(), Common.currentUser.getAddress(), password, createNow);
+                                users.child(phone).setValue(user);
+
+                                Toast.makeText(ChangePassActivity.this, "Thay đổi mật khẩu thành công!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(ChangePassActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                                progressDialog.dismiss();
+                            }
+                        } else {
+                            Toast.makeText(ChangePassActivity.this, "Tài khoản không tồn tại!", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         }
-                    } else {
-                        Toast.makeText(ChangePassActivity.this, "Tài khoản không tồn tại!", Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
                     }
                 }
 

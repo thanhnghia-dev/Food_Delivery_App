@@ -8,16 +8,18 @@ public class User implements Serializable {
     private String email;
     private String address;
     private String password;
+    private String createAt;
 
     public User() {
     }
 
-    public User(String name, String phone, String email, String address, String password) {
+    public User(String name, String phone, String email, String address, String password, String createAt) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.password = password;
+        this.createAt = createAt;
     }
 
     public String getName() {
@@ -58,5 +60,13 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(String createAt) {
+        this.createAt = createAt;
     }
 }

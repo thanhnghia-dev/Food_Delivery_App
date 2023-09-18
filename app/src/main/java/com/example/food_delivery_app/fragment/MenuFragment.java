@@ -88,10 +88,4 @@ public class MenuFragment extends Fragment {
         super.onStart();
         adapter.startListening();
     }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();
-    }
 }

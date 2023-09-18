@@ -45,7 +45,7 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/btnNo"
+                android:id="@+id/btnCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hủy"
@@ -56,11 +56,13 @@
                 android:layout_margin="20dp"/>
 
             <Button
-                android:id="@+id/btnYes"
+                android:id="@+id/btnSend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/red_strong"
                 android:text="Xác nhận"
                 android:textStyle="bold"
+                android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:layout_margin="20dp"/>
 

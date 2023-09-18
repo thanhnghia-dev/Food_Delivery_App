@@ -23,15 +23,15 @@
         android:textSize="22sp"
         android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/foodType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="23dp"
-        android:layout_marginLeft="20dp"
-        android:textColor="@color/white"
-        android:text="Food type"
-        android:textSize="13sp"/>
+        <TextView
+            android:id="@+id/foodType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="23dp"
+            android:textColor="@color/white"
+            android:text="Food type"
+            android:textSize="13sp"/>
 
 </RelativeLayout>
