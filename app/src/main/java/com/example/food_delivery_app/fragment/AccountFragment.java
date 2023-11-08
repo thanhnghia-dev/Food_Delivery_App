@@ -1,9 +1,12 @@
 package com.example.food_delivery_app.fragment;
 
+import android.accounts.Account;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -35,6 +38,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -133,6 +137,7 @@ public class AccountFragment extends Fragment {
     }
 
     // Google log-in
+    @SuppressLint("SetTextI18n")
     private void GoogleLogIn() {
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         gsc = GoogleSignIn.getClient(getActivity(), gso);
@@ -142,7 +147,12 @@ public class AccountFragment extends Fragment {
         if (account != null) {
             String perName = account.getDisplayName();
             String email = account.getEmail();
+            Uri photoUrl = account.getPhotoUrl();
 
+            if (photoUrl != null) {
+                String avatar = photoUrl.toString();
+                Picasso.get().load(avatar).into(profileImage);
+            }
             tvWelcomeName.setText(perName);
             tvFullName.setText(perName);
             tvEmail.setText(email);
@@ -152,6 +162,7 @@ public class AccountFragment extends Fragment {
     }
 
     // Handle display logout dialog
+    @SuppressLint("SetTextI18n")
     private void handleLogoutDialog() {
         Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -163,7 +174,7 @@ public class AccountFragment extends Fragment {
         Button btnYes = dialog.findViewById(R.id.btnSend);
         Button btnNo = dialog.findViewById(R.id.btnCancel);
 
-        tvMessage.setText("Bạn có chắc chắn muốn đăng xuất?");
+        tvMessage.setText("Bạn có chắc muốn đăng xuất?");
 
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override

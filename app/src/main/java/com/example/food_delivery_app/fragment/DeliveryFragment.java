@@ -113,6 +113,8 @@ public class DeliveryFragment extends Fragment {
     // Calculate discount
     private int discount() {
         int discount = 0;
+        int temp = 0;
+        cart = new Database(getActivity()).getAll();
         LocalDate date;
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -120,8 +122,11 @@ public class DeliveryFragment extends Fragment {
             int day = date.getDayOfMonth();
             int month = date.getMonthValue();
 
+            for (OrderDetail orderDetail : cart) {
+                temp += Integer.parseInt(orderDetail.getPrice()) * orderDetail.getQuantity();
+            }
             if (day == month) {
-                discount = 20000;
+                discount = (int) (temp * 0.5);
             }
         }
         return discount;

@@ -5,11 +5,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,9 +54,8 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient gsc;
     ImageView btnGoogle, btnFacebook;
     ProgressDialog progressDialog;
-    FirebaseAuth auth;
 
-    private static final int RC_SIGN_IN = 9001;
+    private static final int RC_SIGN_IN = 1000;
 
     // User DAO
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -71,20 +76,9 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
 
         // Google Sign in
-        auth = FirebaseAuth.getInstance();
-
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build();
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
 
         gsc = GoogleSignIn.getClient(this, gso);
-
-        // Check Firebase user is activated
-        if (auth.getCurrentUser() != null) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
-            finish();
-        }
 
         // Button log-in
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, ForgotPassActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
+                finish();
             }
         });
 
@@ -112,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
+                finish();
             }
         });
 
@@ -127,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         btnFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(LoginActivity.this, "Login Facebook", Toast.LENGTH_SHORT).show();
+                handleAlertDialog();
             }
         });
 
@@ -198,37 +194,19 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
+                task.getResult(ApiException.class);
+                loginWithGoogle();
             } catch (Exception e) {
                 cancelGoogleSignIn();
             }
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        auth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    FirebaseUser user = auth.getCurrentUser();
-
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("id", user.getUid());
-                    map.put("name", user.getDisplayName());
-                    map.put("phone", user.getPhoneNumber());
-                    map.put("profile", user.getPhotoUrl().toString());
-
-                    users.child(user.getUid()).setValue(map);
-
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(LoginActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+    private void loginWithGoogle() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
+        finish();
     }
 
     // Confirm message when Google sign-in failed
@@ -244,5 +222,29 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         alertDialog.show();
+    }
+
+    // Handle alert dialog
+    @SuppressLint("SetTextI18n")
+    private void handleAlertDialog() {
+        Dialog dialog = new Dialog(LoginActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.custom_alert_dialog);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        TextView tvMessage = dialog.findViewById(R.id.message);
+        Button btnClose = dialog.findViewById(R.id.btnClose);
+
+        tvMessage.setText("Chức năng đang phát triển, vui lòng quay lại sau");
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

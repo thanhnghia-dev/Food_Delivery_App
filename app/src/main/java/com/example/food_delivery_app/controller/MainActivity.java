@@ -1,6 +1,5 @@
 package com.example.food_delivery_app.controller;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -34,6 +34,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         replaceFragment(new HomeFragment());
         bottomNav.getMenu().findItem(R.id.homes).setChecked(true);
 
-        bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
@@ -74,25 +75,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     case R.id.cart:
                         replaceFragment(new CartFragment());
+                        bottomNav.getMenu().findItem(R.id.cart).setChecked(true);
                         break;
 
                     case R.id.account:
                         replaceFragment(new AccountFragment());
+                        bottomNav.getMenu().findItem(R.id.account).setChecked(true);
                         break;
 
                 }
                 return true;
             }
         });
-
-        // Press back key
-        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                finish();
-            }
-        };
-        MainActivity.this.getOnBackPressedDispatcher().addCallback(this, callback);
 
     }
 
@@ -126,22 +120,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.log_out) {
             handleLogoutDialog();
         }
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
     }
 
     // Handle display logout dialog
+    @SuppressLint("SetTextI18n")
     private void handleLogoutDialog() {
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -153,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Button btnYes = dialog.findViewById(R.id.btnSend);
         Button btnNo = dialog.findViewById(R.id.btnCancel);
 
-        tvMessage.setText("Bạn có chắc chắn muốn đăng xuất?");
+        tvMessage.setText("Bạn có chắc muốn đăng xuất?");
 
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override

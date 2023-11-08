@@ -4,6 +4,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 public class ForgotPassActivity extends AppCompatActivity {
     EditText edtPhone;
     Button btnSubmit;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,7 @@ public class ForgotPassActivity extends AppCompatActivity {
 
         edtPhone = findViewById(R.id.edPhone);
         btnSubmit = findViewById(R.id.btnContinue);
+        progressDialog = new ProgressDialog(this);
 
         // User DAO
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -41,8 +44,11 @@ public class ForgotPassActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String phone = edtPhone.getText().toString();
 
+                progressDialog.setMessage("Chờ xíu...");
+                progressDialog.show();
                 if (phone.isEmpty()) {
                     Toast.makeText(ForgotPassActivity.this, "Vui lòng không được để trống!", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                 } else {
                     users.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -54,8 +60,10 @@ public class ForgotPassActivity extends AppCompatActivity {
                                 Intent intent = new Intent(ForgotPassActivity.this, NewPassActivity.class);
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.anim_in_right, R.anim.anim_out_left);
+                                progressDialog.dismiss();
                             } else {
                                 Toast.makeText(ForgotPassActivity.this, "Số điện thoại không tồn tại!", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
                         }
 
@@ -75,6 +83,7 @@ public class ForgotPassActivity extends AppCompatActivity {
                 Intent intent = new Intent(ForgotPassActivity.this, LoginActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                finish();
             }
         };
         ForgotPassActivity.this.getOnBackPressedDispatcher().addCallback(this, callback);

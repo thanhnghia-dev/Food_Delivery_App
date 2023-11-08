@@ -72,6 +72,7 @@ public class SignupActivity extends AppCompatActivity {
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                finish();
             }
         });
         // Press back key
@@ -81,6 +82,7 @@ public class SignupActivity extends AppCompatActivity {
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
+                finish();
             }
         };
         SignupActivity.this.getOnBackPressedDispatcher().addCallback(this, callback);

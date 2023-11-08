@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -21,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -188,19 +190,27 @@ public class CheckoutFragment extends Fragment {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.custom_change_dialog);
+        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        EditText edAddress = dialog.findViewById(R.id.edAddress);
+        EditText edHome = dialog.findViewById(R.id.edHome);
+        EditText edCity = dialog.findViewById(R.id.edCity);
+        EditText edProvince = dialog.findViewById(R.id.edProvince);
         Button btnYes = dialog.findViewById(R.id.btnSend);
         Button btnNo = dialog.findViewById(R.id.btnCancel);
 
         btnYes.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View view) {
-                if (edAddress.getText().toString().isEmpty()) {
+                String home = edHome.getText().toString();
+                String city = edCity.getText().toString();
+                String province = edProvince.getText().toString();
+
+                if (home.isEmpty() || city.isEmpty() || province.isEmpty() ) {
                     Toast.makeText(getActivity(), "Vui lòng không được để trống!", Toast.LENGTH_SHORT).show();
                 } else {
-                    deliAddress.setText(edAddress.getText());
+                    deliAddress.setText(home + ", " + city + ", " + province);
                     Toast.makeText(getActivity(), "Địa chỉ giao hàng được cập nhật!", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
@@ -219,22 +229,32 @@ public class CheckoutFragment extends Fragment {
     // Calculate transport fee
     private int transportFee() {
         int fee = 0;
+        LocalDate date;
         String address = deliveryAddress();
         StringTokenizer tokenizer = new StringTokenizer(address, ",");
 
-        while (tokenizer.hasMoreTokens()) {
-            String ward = tokenizer.nextToken();
-            String district = tokenizer.nextToken();
-            String city = tokenizer.nextToken();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            date = LocalDate.now();
+            int day = date.getDayOfMonth();
+            int month = date.getMonthValue();
 
-            if (city.equals(" TP. HCM")) {
-                fee = 10000;
-            } else if (city.equals(" Bình Dương")) {
-                fee = 15000;
-            } else if (city.equals(" Đồng Nai")) {
-                fee = 20000;
-            } else {
-                fee = 25000;
+            while (tokenizer.hasMoreTokens()) {
+                String ward = tokenizer.nextToken();
+                String district = tokenizer.nextToken();
+                String city = tokenizer.nextToken();
+
+                if (city.equals(" TP. HCM")) {
+                    fee = 10000;
+                } else if (city.equals(" Bình Dương")) {
+                    fee = 15000;
+                } else if (city.equals(" Đồng Nai")) {
+                    fee = 20000;
+                } else {
+                    fee = 25000;
+                }
+            }
+            if (day == month) {
+                fee = 0;
             }
         }
         return fee;
@@ -243,6 +263,8 @@ public class CheckoutFragment extends Fragment {
     // Calculate discount
     private int discount() {
         int discount = 0;
+        int temp = 0;
+        cart = new Database(getActivity()).getAll();
         LocalDate date;
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -250,8 +272,11 @@ public class CheckoutFragment extends Fragment {
             int day = date.getDayOfMonth();
             int month = date.getMonthValue();
 
+            for (OrderDetail orderDetail : cart) {
+                temp += Integer.parseInt(orderDetail.getPrice()) * orderDetail.getQuantity();
+            }
             if (day == month) {
-                discount = 20000;
+                discount = (int) (temp * 0.5);
             }
         }
         return discount;

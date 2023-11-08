@@ -17,38 +17,25 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 import java.util.List;
 
-public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.OrderDetailViewHolder> {
-    private List<OrderDetail> orderDetails;
+public class OrderDetailAdapter extends FirebaseRecyclerAdapter<OrderDetail, OrderDetailAdapter.OrderDetailViewHolder> {
 
-    public OrderDetailAdapter(List<OrderDetail> orderDetails) {
-        this.orderDetails = orderDetails;
+    public OrderDetailAdapter(@NonNull FirebaseRecyclerOptions<OrderDetail> options) {
+        super(options);
     }
 
     @NonNull
     @Override
-    public OrderDetailAdapter.OrderDetailViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public OrderDetailViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.order_detail_item, parent, false);
         return new OrderDetailViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrderDetailViewHolder holder, int position) {
-        OrderDetail od = orderDetails.get(position);
-        if (od == null) {
-            return;
-        }
-        holder.foodName.setText(od.getFoodName());
-        holder.quantity.setText(od.getQuantity());
-        holder.price.setText(od.getPrice());
-        Glide.with(holder.foodImage.getContext()).load(od.getFoodImage()).into(holder.foodImage);
-    }
-
-    @Override
-    public int getItemCount() {
-        if (orderDetails != null) {
-            return orderDetails.size();
-        }
-        return 0;
+    protected void onBindViewHolder(@NonNull OrderDetailViewHolder holder, int position, @NonNull OrderDetail model) {
+        holder.foodName.setText(model.getFoodName());
+        holder.quantity.setText(model.getQuantity());
+        holder.price.setText(model.getPrice());
+        Glide.with(holder.foodImage.getContext()).load(model.getFoodImage()).into(holder.foodImage);
     }
 
     public static class OrderDetailViewHolder extends RecyclerView.ViewHolder {
