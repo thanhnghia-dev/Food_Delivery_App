@@ -40,6 +40,7 @@ import com.google.android.material.navigation.NavigationView;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     BottomNavigationView bottomNav;
     DrawerLayout drawerLayout;
+    Toolbar toolbar;
     GoogleSignInOptions gso;
     GoogleSignInClient gsc;
 
@@ -48,41 +49,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        drawerLayout = findViewById(R.id.drawer_layout);
         bottomNav = findViewById(R.id.bottom_nav);
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolBar);
         setSupportActionBar(toolbar);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        // Google Sign in
+        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        gsc = GoogleSignIn.getClient(this, gso);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_nav, R.string.close_nav);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
+                R.string.open_nav, R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        replaceFragment(new HomeFragment());
-        bottomNav.getMenu().findItem(R.id.homes).setChecked(true);
+        NavigationView navigationView = findViewById(R.id.navigation_drawer);
+        navigationView.setNavigationItemSelectedListener(this);
 
+        replaceFragment(new HomeFragment());
         bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.homes:
-                        replaceFragment(new HomeFragment());
-                        bottomNav.getMenu().findItem(R.id.homes).setChecked(true);
-                        break;
+                int id = item.getItemId();
 
-                    case R.id.cart:
-                        replaceFragment(new CartFragment());
-                        bottomNav.getMenu().findItem(R.id.cart).setChecked(true);
-                        break;
-
-                    case R.id.account:
-                        replaceFragment(new AccountFragment());
-                        bottomNav.getMenu().findItem(R.id.account).setChecked(true);
-                        break;
-
+                if (id == R.id.homes) {
+                    replaceFragment(new HomeFragment());
+                }
+                else if (id == R.id.cart) {
+                    replaceFragment(new CartFragment());
+                }
+                else if (id == R.id.account) {
+                    replaceFragment(new AccountFragment());
                 }
                 return true;
             }
@@ -92,10 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Google Sign in
-        gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        gsc = GoogleSignIn.getClient(this, gso);
-
         int id = item.getItemId();
 
         if (id == R.id.menus) {
@@ -104,18 +97,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.my_order) {
             Intent intent = new Intent(MainActivity.this, OrderActivity.class);
             startActivity(intent);
+            finish();
         }
         else if (id == R.id.wish_list) {
             Intent intent = new Intent(MainActivity.this, WishListActivity.class);
             startActivity(intent);
+            finish();
         }
         else if (id == R.id.notification) {
             Intent intent = new Intent(MainActivity.this, NotificationActivity.class);
             startActivity(intent);
+            finish();
         }
         else if (id == R.id.about_us) {
             Intent intent = new Intent(MainActivity.this, AboutUsActivity.class);
             startActivity(intent);
+            finish();
         }
         else if (id == R.id.log_out) {
             handleLogoutDialog();
@@ -126,11 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
     // Handle display logout dialog
@@ -157,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             Intent login = new Intent(MainActivity.this, LoginActivity.class);
-                            login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(login);
                             overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
                         }
@@ -165,7 +157,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 else {
                     Intent login = new Intent(MainActivity.this, LoginActivity.class);
-                    login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(login);
                     overridePendingTransition(R.anim.anim_in_left, R.anim.anim_out_right);
                 }

@@ -132,7 +132,6 @@ public class HomeFragment extends Fragment {
         FragmentManager fm = getParentFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.frame_layout, fragment);
-        ft.addToBackStack(null);
         ft.commit();
     }
 }
